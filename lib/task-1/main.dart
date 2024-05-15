@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'counter_action.dart';
+import 'custom_floating_action.dart';
+
+
 void main() {
   runApp(const MyApp());
 }
@@ -20,10 +24,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-enum Action {
-  increment,
-  decrement,
-}
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -35,44 +35,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-  bool _isButtonActive = true;
-  int _incrementCounts = 0;
-  int _decrementCounts = 0;
-
-  String someString = "";
-
-  void Function()? _setCounterState(Action action) {
-    return () {
-      setState(() {
-        _counter = action == Action.increment ? _counter + 1 : _counter - 1;
-      });
-      setButtonCondition();
-      setClickCount(action);
-    };
-  }
-
-  void setClickCount(Action action) {
-    action == Action.increment ? _incrementCounts += 1 : _decrementCounts += 1;
-  }
-
-  FloatingActionButton setButton(
-      Action onPressedFunction, String tooltip, Widget child) {
-    return FloatingActionButton(
-      tooltip: tooltip,
-      onPressed:
-          _isButtonActive == false && onPressedFunction == Action.decrement
-              ? null
-              : _setCounterState(onPressedFunction),
-      child: child,
-    );
-  }
-
-  void setButtonCondition() {
-    setState(() {
-      _isButtonActive = _counter != 0;
-    });
-  }
+  final int _counter = 0;
+  final int _incrementCounts = 0;
+  final int _decrementCounts = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -100,10 +65,13 @@ class _MyHomePageState extends State<MyHomePage> {
           Text(
             'cliks: $_incrementCounts',
           ),
-          setButton(Action.increment, Action.increment.toString(),
-              const Icon(Icons.add)),
-          setButton(Action.decrement, Action.decrement.toString(),
-              const Icon(Icons.remove)),
+          CustomFloatingButton(CounterAction.increment,CounterAction.increment.toString(),
+               const Icon(Icons.add),_counter,_incrementCounts);
+
+          // setButton(CounterAction.increment, CounterAction.increment.toString(),
+          //     const Icon(Icons.add)),
+          // setButton(CounterAction.decrement, CounterAction.decrement.toString(),
+          //     const Icon(Icons.remove)),
           Text(
             'clicks: $_decrementCounts',
           ),
