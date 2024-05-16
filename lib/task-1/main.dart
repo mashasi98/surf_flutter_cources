@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 
-import 'counter_action.dart';
-import 'custom_floating_action.dart';
-
-
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -24,7 +25,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
@@ -35,9 +35,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final int _counter = 0;
-  final int _incrementCounts = 0;
-  final int _decrementCounts = 0;
+  int _counter = 0;
+  int _incrementCounts = 0;
+  late int _decrementCounts = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -62,18 +62,27 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
-          Text(
-            'cliks: $_incrementCounts',
+          FloatingActionButton.extended(
+            onPressed: () {
+              setState(() {
+                _counter++;
+                _incrementCounts++;
+              });
+            },
+            icon: const Icon(Icons.add),
+            label: Text(_incrementCounts.toString()),
           ),
-          CustomFloatingButton(CounterAction.increment,CounterAction.increment.toString(),
-               const Icon(Icons.add),_counter,_incrementCounts);
-
-          // setButton(CounterAction.increment, CounterAction.increment.toString(),
-          //     const Icon(Icons.add)),
-          // setButton(CounterAction.decrement, CounterAction.decrement.toString(),
-          //     const Icon(Icons.remove)),
-          Text(
-            'clicks: $_decrementCounts',
+          FloatingActionButton.extended(
+            onPressed: () {
+              _counter == 0
+                  ? null
+                  : setState(() {
+                      _counter--;
+                      _decrementCounts++;
+                    });
+            },
+            icon: const Icon(Icons.remove),
+            label: Text(_decrementCounts.toString()),
           ),
         ],
       ),
