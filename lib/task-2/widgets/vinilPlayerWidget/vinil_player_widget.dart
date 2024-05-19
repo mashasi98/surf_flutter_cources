@@ -1,5 +1,3 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:surf_flutter_cources/task-2/entity/vinil_record.dart';
 
@@ -15,49 +13,76 @@ class VinilPlayerWidget extends StatefulWidget {
 class _VinilPlayerWidgetState extends State<VinilPlayerWidget> {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        if (kDebugMode) {
-          print('tap');
-        }
-      },
-      child: mainRecordContainer(),
-    );
-  }
-
-  SizedBox mainRecordContainer() {
     return SizedBox(
-      height: 400,
+      height: MediaQuery.of(context).size.height * 0.74,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Container(
-            margin: const EdgeInsets.only(right: 20),
-            alignment: Alignment.centerRight,
-            child: const Column(children: [
-              Text(" "  ),
-              Text(" "),
-            ]),
-          ),
-          SizedBox(
-            height: 400,
-            width: 400,
-            child: Transform.translate(
-              offset: const Offset(80, 0),
-              child:
-              Image.asset(
-                  'assets/images/p2.png'),
-            ),
-          ),
-          Container(
-            height: 30,
-            alignment: Alignment.centerRight,
-            margin: const EdgeInsets.only(right: 20),
-            child: const Text("Time to change side"),
+          Column(
+            children: [
+              Container(
+                margin: const EdgeInsets.only(right: 20),
+                alignment: Alignment.centerRight,
+                padding: const EdgeInsets.only(bottom: 20),
+                child: const Text(" no name "),
+              ),
+              Container(
+                margin: const EdgeInsets.only(right: 20),
+                alignment: Alignment.centerRight,
+                padding: const EdgeInsets.only(bottom: 20),
+                child: const Text("no track "),
+              ),
+              VinilPlayerRound(),
+            ],
           ),
         ],
       ),
     );
   }
+}
+
+class VinilPlayerRound extends StatelessWidget {
+  const VinilPlayerRound({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Container(
+          margin: const EdgeInsets.only(bottom: 50),
+          height: MediaQuery.of(context).size.height * 0.5,
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/images/p2.png'),
+              fit: BoxFit.cover,
+              alignment: Alignment(-1.2, 0),
+            ),
+          ),
+        ),
+        Positioned(
+          top: MediaQuery.of(context).size.height * 0.04,
+          left: MediaQuery.of(context).size.width * 0.13,
+          child: Container(
+            width: 390,
+            height: 390,
+            alignment: Alignment.topCenter,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.grey.withOpacity(0.008),
+            ),
+            child:
+              PlayerDragTarget()
+            ,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class PlayerDragTarget extends StatelessWidget {
 }

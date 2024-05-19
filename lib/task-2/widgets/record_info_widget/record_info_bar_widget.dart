@@ -9,31 +9,24 @@ class VinilInfoBarWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return  Container(
         color: const Color(0xffc89365),
-        height: 100.0,
-        child: Row(
+      height: MediaQuery.of(context).size.height * 0.13 ,
+      child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Container(
-              height: 50,
-              width: 50,
-              margin: const EdgeInsets.only(left: 10, top: 20),
+              height: 90,
+              width: 90,
+              margin: const EdgeInsets.only(left: 10, top: 40),
               decoration: const BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: Color(0xff63492f),
-                    blurRadius: 20.0,
-                    offset: Offset(6.0, 6.0),
-                  ),
-                ],
                 image: DecorationImage(
                   alignment: Alignment.centerLeft,
-                  image: AssetImage('assets/images/p2.png'),
+                  image: AssetImage('assets/images/logo3.png'),
                   fit: BoxFit.contain,
                 ),
               ),
             ),
             Container(
-                padding: const EdgeInsets.only(left: 10, top: 20),
+                padding: const EdgeInsets.only( top :40),
                 child: const Text("Vanilla \n Vinilla",
                     style: TextStyle(
                       color: Colors.white,
