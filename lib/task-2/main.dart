@@ -34,19 +34,19 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: const NewWidget(),
+      body: const ChangeableWidget(),
     );
   }
 }
 
-class NewWidget extends StatefulWidget {
-  const NewWidget({Key? key});
+class ChangeableWidget extends StatefulWidget {
+  const ChangeableWidget({Key? key});
 
   @override
-  _NewWidgetState createState() => _NewWidgetState();
+  _ChangeableWidgetState createState() => _ChangeableWidgetState();
 }
 
-class _NewWidgetState extends State<NewWidget> {
+class _ChangeableWidgetState extends State<ChangeableWidget> {
   bool _isCircle = false;
   double _rotation = 0;
   double _dragY = 0;
