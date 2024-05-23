@@ -12,19 +12,17 @@ class GreetingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    return LayoutBuilder(builder: (context, constraints) {
-      double parentWidth = constraints.maxWidth;
-      return Container(
-        alignment: Alignment.topLeft,
-        width: parentWidth,
-        height: size.height,
-        child: const Column(
-          children: [
-            FioWidget(),
-          ],
-        ),
-      );
-    });
+    var size = MediaQuery.of(context).size;
+    return Container(
+      height: size.height,
+      alignment: Alignment.topLeft,
+      width: size.width,
+      child: const Column(
+        children: [
+          FioWidget(),
+        ],
+      ),
+    );
   }
 }
+
