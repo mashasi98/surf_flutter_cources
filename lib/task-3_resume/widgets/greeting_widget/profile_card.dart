@@ -13,7 +13,7 @@ class ProfileCard extends StatelessWidget {
         children: [
           Expanded(
             flex: 3,
-            child: _buildProfileInfoContainer(),
+            child: _buildProfileInfoContainer(decorator),
           ),
           Expanded(
             flex: 2,
@@ -24,7 +24,7 @@ class ProfileCard extends StatelessWidget {
     );
   }
 
-  Container _buildProfileInfoContainer() {
+  Container _buildProfileInfoContainer(CustomDecorator decorator) {
     return Container(
       margin: const EdgeInsets.all(5),
       decoration: const BoxDecoration(
@@ -35,18 +35,49 @@ class ProfileCard extends StatelessWidget {
       ),
       child: LayoutBuilder(
         builder: (context , constraints) {
-          return Container(
-            width: constraints.maxWidth *0.8,
-            height: constraints.maxHeight*0.8,
-            margin: const EdgeInsets.only( left: 32 , right: 32, top: 40, bottom: 40),
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage("assets/images/task-3/foto.jpg"),
-                fit: BoxFit.cover,
+          return Stack(
+            children: [
+              container(constraints),
+              positioned(
+
+                'Maria\nNikoletta',
+                decorator.nameDecorator(),
+                Size(constraints.maxWidth * 0.3, constraints.maxHeight *0.93),
               ),
-            ),
+              positioned(
+                'Sikorskaya',
+                TextStyle(),
+                Size(constraints.maxWidth * 0.7, constraints.maxHeight * 0.7),
+              ),
+            ],
           );
-        }
+        },
+      ),
+    );
+  }
+
+  Positioned positioned(String text, TextStyle textStyle, Size containerSize) {
+    return Positioned(
+      top: containerSize.height,
+      left: containerSize.width,
+      child: Text(
+        text,
+        style: textStyle,
+        // TextStyle(fontSize: 40, color: color),
+      ),
+    );
+  }
+
+  Container container(BoxConstraints constraints) {
+    return Container(
+      width: constraints.maxWidth * 0.85,
+      height: constraints.maxHeight * 0.85,
+      margin: const EdgeInsets.only(left: 30, right: 32, top: 40, bottom: 40),
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("assets/images/task-3/foto.jpg"),
+          fit: BoxFit.cover,
+        ),
       ),
     );
   }

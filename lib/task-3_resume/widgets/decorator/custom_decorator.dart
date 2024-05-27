@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class  CustomDecorator{
@@ -25,6 +26,14 @@ class  CustomDecorator{
           offset: Offset(-3, 1),
         ),
       ],
+    );
+  }
+
+  TextStyle nameDecorator(){
+    return GoogleFonts.orbitron(
+      color: Colors.white,
+      fontSize : 15 ,
+      height: 1,
     );
   }
 
