@@ -32,7 +32,7 @@ class CustomDecorator {
   }
 
   BoxDecoration backgroundBorderDecorator(
-      String imagePath, BoxFit fit, Color backgroundColor) {
+      String imagePath, BoxFit fit) {
     return BoxDecoration(
       image: DecorationImage(
         image: AssetImage(imagePath),
@@ -42,10 +42,6 @@ class CustomDecorator {
       ),
     );
   }
-
-  // fit: BoxFit.fill,
-  // colorFilter: ColorFilter.mode(
-  // const Color(0xFFEC3EC7).withOpacity(0.2), BlendMode.colorDodge),
 
   TextStyle playerTextDecorator() {
     return GoogleFonts.orbitron(

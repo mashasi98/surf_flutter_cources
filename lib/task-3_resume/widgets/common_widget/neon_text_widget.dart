@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'decorator/custom_decorator.dart';
+import '../decorator/custom_decorator.dart';
 
 class NeonTextWidget extends StatelessWidget {
   const NeonTextWidget({

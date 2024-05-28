@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:surf_flutter_cources/task-3_resume/resume_text.dart';
 
 import '../decorator/custom_decorator.dart';
-import '../rotated_text_widget.dart';
+import '../common_widget/rotated_text_widget.dart';
 
 class ProfileCardWidget extends StatelessWidget {
   const ProfileCardWidget({super.key});
@@ -63,7 +63,7 @@ class _ProfileInfoWidget extends StatelessWidget {
       decoration: CustomDecorator.instance.backgroundBorderDecorator(
           "assets/images/task-3/border_vertical.png",
           BoxFit.fill,
-          const Color(0xFF770AF6).withOpacity(0.02)),
+      ),
       child: LayoutBuilder(
         builder: (context, constraints) {
           return Stack(

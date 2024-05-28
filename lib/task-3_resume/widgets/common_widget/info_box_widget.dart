@@ -1,38 +1,45 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../decorator/custom_decorator.dart';
-import '../neon_text_widget.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'neon_text_widget.dart';
 
-class AboutWidget extends StatelessWidget {
+class InfoBoxWidget extends StatelessWidget {
   final Map<String, String> info;
+  final BoxDecoration decoration;
 
-  const AboutWidget({super.key, required this.info});
+  const InfoBoxWidget({super.key, required this.info, required this.decoration});
 
   @override
   Widget build(BuildContext context) {
-    return IntrinsicHeight(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _HeadTextWidget(text: info.keys.toString()),
-          Container(
-            decoration: CustomDecorator.instance.backgroundBorderDecorator(
-              'assets/images/task-3/border_horizontal.png',
-              BoxFit.fill,
-              const Color(0xFFEC3EC7).withOpacity(0.2),
-            ),
-            child: Container(
-              padding: const EdgeInsets.all(30),
-              width: double.maxFinite,
-              height: double.maxFinite,
-              child: Text(
-                info.values.toString(),
-                style: const TextStyle(fontSize: 20, color: Color(0xFFEC3EC7)),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _HeadTextWidget(text: info.keys.first),
+        Container(
+          decoration: decoration,
+
+          child: Container(
+
+            padding:
+                const EdgeInsets.all(55),
+            child: Text(
+              info.values.first,
+              style:  GoogleFonts.tektur(
+                fontSize: 18,
+                color: const Color(0xFFFFFFFF),
+                  shadows: [
+                    const Shadow(
+                      color: Color(0xFF00D0D1),
+                      blurRadius: 2,
+                      offset: Offset(-2, 1),
+                    ),
+                  ]
               ),
+              textAlign: TextAlign.start,
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
@@ -56,11 +63,11 @@ class _HeadTextWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 NeonTextWidget(
-                    word: separatedWords[0],
+                    word: separatedWords[0].toString(),
                     topColor: const Color(0xFFB189DE),
                     bottomColor: const Color(0xd0ae67fb)),
                 NeonTextWidget(
-                    word: separatedWords[1],
+                    word: separatedWords[1].toString(),
                     topColor: const Color(0xB67FD3E7),
                     bottomColor: const Color(0xb342cce4)),
               ],
