@@ -4,7 +4,7 @@ import 'package:surf_flutter_cources/task-3_resume/widgets/greeting_widget/profi
 import 'more_info_widget.dart';
 
 class GreetingWidget extends StatelessWidget {
-  const GreetingWidget({
+  const  GreetingWidget({
     super.key,
   });
 

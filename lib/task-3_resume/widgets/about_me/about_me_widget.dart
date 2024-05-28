@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:surf_flutter_cources/task-3_resume/resume_text.dart';
 import 'about_info_widget.dart';
 
 class AboutMeWidget extends StatelessWidget {
@@ -6,18 +7,14 @@ class AboutMeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SizedBox(
-      child: IntrinsicHeight(
-        child: Column(
-          children: [
-            AboutWidget(topText: 'ABOUT', bottomText: "ME"),
-            // AboutBodyWidget.oneWord(bottomText: 'HOBBIES'),
-            AboutWidget(
-              topText: 'WORK',
-              bottomText: "EXPIRIENCE",
-            ),
-          ],
-        ),
+    return const IntrinsicHeight(
+      child: Column(
+        children: [
+          AboutWidget(info: ResumeTexts.aboutMe),
+          AboutWidget(info: ResumeTexts.hobbies),
+          AboutWidget(info: ResumeTexts.education),
+          AboutWidget(info: ResumeTexts.workExperience),
+        ],
       ),
     );
   }

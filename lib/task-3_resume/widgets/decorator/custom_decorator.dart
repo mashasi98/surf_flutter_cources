@@ -2,7 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CustomDecorator {
-  BoxDecoration customBackgroundBorderPhotoDecorator() {
+  static CustomDecorator? _instance;
+
+  CustomDecorator._();
+
+  static CustomDecorator get instance {
+    _instance ??= CustomDecorator._();
+    return _instance!;
+  }
+
+  BoxDecoration avatarPhotoDecorator() {
+    return const BoxDecoration(
+      image: DecorationImage(
+        image: AssetImage("assets/images/task-3/foto.jpg"),
+        fit: BoxFit.cover,
+      ),
+    );
+  }
+
+  BoxDecoration backgroundBorderPhotoDecorator() {
     return BoxDecoration(
       image: DecorationImage(
         image: const AssetImage("assets/images/task-3/main_bg.jpg"),
@@ -13,16 +31,21 @@ class CustomDecorator {
     );
   }
 
-  BoxDecoration customBackgroundBorderBodyDecorator(String imagePath) {
+  BoxDecoration backgroundBorderDecorator(
+      String imagePath, BoxFit fit, Color backgroundColor) {
     return BoxDecoration(
-        image: DecorationImage(
-      image: AssetImage(imagePath),
-      // 'assets/images/task-3/border_horizontal.png'),
-      fit: BoxFit.fill,
-      colorFilter: ColorFilter.mode(
-          const Color(0xFFEC3EC7).withOpacity(0.2), BlendMode.colorDodge),
-    ));
+      image: DecorationImage(
+        image: AssetImage(imagePath),
+        fit: fit,
+        colorFilter: ColorFilter.mode(
+            const Color(0xFFEC3EC7).withOpacity(0.2), BlendMode.colorDodge),
+      ),
+    );
   }
+
+  // fit: BoxFit.fill,
+  // colorFilter: ColorFilter.mode(
+  // const Color(0xFFEC3EC7).withOpacity(0.2), BlendMode.colorDodge),
 
   TextStyle playerTextDecorator() {
     return GoogleFonts.orbitron(
@@ -99,6 +122,18 @@ class CustomDecorator {
           color: shadeColor.withOpacity(0.5),
         ),
       ],
+    );
+  }
+
+  TextStyle infoTextDecorator() {
+    return GoogleFonts.abel(
+      textStyle: TextStyle(
+        fontSize: 50,
+        foreground: Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.5
+          ..color = const Color(0xc8f8f8f8),
+      ),
     );
   }
 }

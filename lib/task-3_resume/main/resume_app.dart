@@ -4,15 +4,14 @@ import 'package:surf_flutter_cources/task-3_resume/widgets/contact_widget.dart';
 import 'package:surf_flutter_cources/task-3_resume/widgets/decorator/custom_decorator.dart';
 import 'package:surf_flutter_cources/task-3_resume/widgets/greeting_widget/greeting_widget.dart';
 
-class MyResumeApp extends StatelessWidget {
-  const MyResumeApp({super.key});
+class ResumeApp extends StatelessWidget {
+  const ResumeApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    CustomDecorator decorator = CustomDecorator();
     return Scaffold(
       body: Container(
-        decoration: decorator.customBackgroundBorderPhotoDecorator(),
+        decoration: CustomDecorator.instance.backgroundBorderPhotoDecorator(),
         child: ListView(
           children: const [
             Column(
@@ -28,4 +27,3 @@ class MyResumeApp extends StatelessWidget {
     );
   }
 }
-

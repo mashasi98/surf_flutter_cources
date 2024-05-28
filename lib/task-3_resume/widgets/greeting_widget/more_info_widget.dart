@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:surf_flutter_cources/task-3_resume/widgets/decorator/custom_decorator.dart';
 
 import '../../resume_text.dart';
 
@@ -21,48 +21,33 @@ class _MoreInfoWidgetState extends State<MoreInfoWidget> {
             children: [
               Expanded(
                 flex: 3,
-                child: _buildTextInfo(),
+                child: Container(
+                  alignment: Alignment.bottomCenter,
+                  child: Text(
+                    ResumeTexts.moreInfo,
+                    textAlign: TextAlign.center,
+                    style: CustomDecorator.instance.infoTextDecorator(),
+                  ),
+                ),
               ),
               Expanded(
                 flex: 1,
-                child: _buildAnimatedArrow(),
+                child: Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: const AssetImage(
+                          "assets/images/task-3/arrow_down.gif"),
+                      fit: BoxFit.contain,
+                      colorFilter: ColorFilter.mode(
+                          Colors.white.withOpacity(0.5), BlendMode.srcIn),
+                    ),
+                  ),
+                ),
               ),
             ],
           ),
         );
       },
-    );
-  }
-
-  Container _buildAnimatedArrow() {
-    return Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: const AssetImage("assets/images/task-3/arrow_down.gif"),
-          fit: BoxFit.contain,
-          colorFilter:
-              ColorFilter.mode(Colors.white.withOpacity(0.5), BlendMode.srcIn),
-        ),
-      ),
-    );
-  }
-
-  Container _buildTextInfo() {
-    return Container(
-      alignment: Alignment.bottomCenter,
-      child: Text(
-        ResumeTexts.moreInfo,
-        textAlign: TextAlign.center,
-        style: GoogleFonts.abel(
-          textStyle: TextStyle(
-            fontSize: 50,
-            foreground: Paint()
-              ..style = PaintingStyle.stroke
-              ..strokeWidth = 1.5
-              ..color = const Color(0xc8f8f8f8),
-          ),
-        ),
-      ),
     );
   }
 }

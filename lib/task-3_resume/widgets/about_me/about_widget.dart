@@ -21,7 +21,6 @@ import '../decorator/custom_decorator.dart';
 }
 
  class _AboutWidgetState  extends State<AboutWidget> {
-  static final decorator = CustomDecorator();
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -58,7 +57,7 @@ import '../decorator/custom_decorator.dart';
   Text _buildNeonText(String text, Color textColor, Color shadeColor) {
     return Text(
       text,
-      style: decorator.neonTextDecorator(textColor, shadeColor),
+      style: CustomDecorator.instance.neonTextDecorator(textColor, shadeColor),
       textAlign: TextAlign.left,
     );
   }
