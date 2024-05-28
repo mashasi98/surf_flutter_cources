@@ -12,7 +12,7 @@ class MyResumeApp extends StatelessWidget {
     CustomDecorator decorator = CustomDecorator();
     return Scaffold(
       body: Container(
-        decoration: decorator.buildBackgroundDecoration(),
+        decoration: decorator.customBackgroundBorderPhotoDecorator(),
         child: ListView(
           children: const [
             Column(

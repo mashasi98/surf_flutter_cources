@@ -1,9 +1,13 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:surf_flutter_cources/task-3_resume/resume_text.dart';
 
 import '../decorator/custom_decorator.dart';
 
-class ProfileCard extends StatelessWidget {
-  const ProfileCard({super.key});
+class ProfileCardWidget extends StatelessWidget {
+
+  const ProfileCardWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -27,28 +31,31 @@ class ProfileCard extends StatelessWidget {
   Container _buildProfileInfoContainer(CustomDecorator decorator) {
     return Container(
       margin: const EdgeInsets.all(5),
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage("assets/images/task-3/border_vertical.png"),
+          image: const AssetImage("assets/images/task-3/border_vertical.png"),
           fit: BoxFit.fill,
+          colorFilter: ColorFilter.mode(
+              const Color(0xFF770AF6).withOpacity(0.02), BlendMode.colorDodge),
         ),
       ),
       child: LayoutBuilder(
-        builder: (context , constraints) {
+        builder: (context, constraints) {
           return Stack(
             children: [
-              container(constraints),
-              positioned(
-
-                'Maria\nNikoletta',
-                decorator.nameDecorator(),
-                Size(constraints.maxWidth * 0.3, constraints.maxHeight *0.93),
-              ),
-              positioned(
-                'Sikorskaya',
-                TextStyle(),
-                Size(constraints.maxWidth * 0.7, constraints.maxHeight * 0.7),
-              ),
+              _buildBIOPhoto(constraints),
+              _buildRotatedText(
+                  ResumeTexts.name,
+                  decorator.nameDecorator(),
+                  Size(constraints.maxWidth * 0.3,
+                      constraints.maxHeight * 0.935),
+                  0),
+              _buildRotatedText(
+                  ResumeTexts.secondName,
+                  decorator.secondNameDecorator(),
+                  Size(constraints.maxWidth * 0.66,
+                      constraints.maxHeight * 0.65),
+                  0.5 * pi),
             ],
           );
         },
@@ -56,19 +63,22 @@ class ProfileCard extends StatelessWidget {
     );
   }
 
-  Positioned positioned(String text, TextStyle textStyle, Size containerSize) {
+  Positioned _buildRotatedText(
+      String text, TextStyle textStyle, Size containerSize, double rotate) {
     return Positioned(
       top: containerSize.height,
       left: containerSize.width,
-      child: Text(
-        text,
-        style: textStyle,
-        // TextStyle(fontSize: 40, color: color),
+      child: Transform.rotate(
+        angle: rotate,
+        child: Text(
+          text,
+          style: textStyle,
+        ),
       ),
     );
   }
 
-  Container container(BoxConstraints constraints) {
+  Container _buildBIOPhoto(BoxConstraints constraints) {
     return Container(
       width: constraints.maxWidth * 0.85,
       height: constraints.maxHeight * 0.85,

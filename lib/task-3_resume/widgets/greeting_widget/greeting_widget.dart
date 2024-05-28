@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:surf_flutter_cources/task-3_resume/widgets/greeting_widget/profile_card.dart';
 
+import 'more_info_widget.dart';
 
 class GreetingWidget extends StatelessWidget {
   const GreetingWidget({
@@ -11,30 +12,19 @@ class GreetingWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Container(
-      height: size.height,
+      height: size.height *0.97,
       width: size.width,
+      padding: const EdgeInsets.only(bottom: 30),
       alignment: Alignment.topLeft,
-      child:  Column(
+      child: const Column(
         children: [
-          const Expanded( flex: 3, child : ProfileCard()),
-          Expanded(flex: 2, child: buildAnimationInfo()),
+           Expanded(flex: 4, child: ProfileCardWidget()),
+           Expanded(flex: 2, child: MoreInfoWidget()),
         ],
       ),
     );
   }
 
-  Container buildAnimationInfo() {
-    return Container(
-      margin: const EdgeInsets.all(5),
-      decoration: const BoxDecoration(
-        color: Colors.indigo,
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-      ),
-      child: Row(
-
-
-      ),
-    );
-  }
 }
+
 
