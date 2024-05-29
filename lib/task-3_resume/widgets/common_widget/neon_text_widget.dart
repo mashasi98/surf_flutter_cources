@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../decorator/custom_decorator.dart';
+import '../decorator/resume_text_decorator.dart';
 
 class NeonTextWidget extends StatelessWidget {
   const NeonTextWidget({
@@ -18,7 +18,7 @@ class NeonTextWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       word,
-      style: CustomDecorator.instance.neonTextDecorator(
+      style: ResumeTextDecorator.instance.neonTextDecorator(
         topColor,
         bottomColor,
       ),

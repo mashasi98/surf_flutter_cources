@@ -1,45 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class CustomDecorator {
-  static CustomDecorator? _instance;
+class ResumeTextDecorator {
+  static ResumeTextDecorator? _instance;
 
-  CustomDecorator._();
+  ResumeTextDecorator._();
 
-  static CustomDecorator get instance {
-    _instance ??= CustomDecorator._();
+  static ResumeTextDecorator get instance {
+    _instance ??= ResumeTextDecorator._();
     return _instance!;
-  }
-
-  BoxDecoration avatarPhotoDecorator() {
-    return const BoxDecoration(
-      image: DecorationImage(
-        image: AssetImage("assets/images/task-3/foto.jpg"),
-        fit: BoxFit.cover,
-      ),
-    );
-  }
-
-  BoxDecoration backgroundBorderPhotoDecorator() {
-    return BoxDecoration(
-      image: DecorationImage(
-        image: const AssetImage("assets/images/task-3/main_bg.jpg"),
-        fit: BoxFit.cover,
-        colorFilter:
-            ColorFilter.mode(Colors.black.withOpacity(0.4), BlendMode.srcOver),
-      ),
-    );
-  }
-
-  BoxDecoration backgroundBorderDecorator(String imagePath, BoxFit fit) {
-    return BoxDecoration(
-      image: DecorationImage(
-        image: AssetImage(imagePath),
-        fit: fit,
-        colorFilter: ColorFilter.mode(
-            const Color(0xFFEC3EC7).withOpacity(0.2), BlendMode.colorDodge),
-      ),
-    );
   }
 
   TextStyle playerTextDecorator() {

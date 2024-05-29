@@ -1,10 +1,8 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:surf_flutter_cources/task-3_resume/resume_text.dart';
-
-import '../decorator/custom_decorator.dart';
-import '../common_widget/rotated_text_widget.dart';
+import '../decorator/resume_box_decorator.dart';
+import '../decorator/resume_text_decorator.dart';
 
 class ProfileCardWidget extends StatelessWidget {
   const ProfileCardWidget({super.key});
@@ -39,7 +37,7 @@ class _PlayerTextWidget extends StatelessWidget {
       alignment: Alignment.topCenter,
       child: RichText(
         text: TextSpan(
-          style: CustomDecorator.instance.playerTextDecorator(),
+          style: ResumeTextDecorator.instance.playerTextDecorator(),
           children: const [
             TextSpan(
               text: "player\n",
@@ -60,9 +58,9 @@ class _ProfileInfoWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.all(5),
-      decoration: CustomDecorator.instance.backgroundBorderDecorator(
-          "assets/images/task-3/border_vertical.png",
-          BoxFit.fill,
+      decoration: ResumeBoxDecorator.instance.backgroundBorderDecorator(
+        "assets/images/task-3/border_vertical.png",
+        BoxFit.fill,
       ),
       child: LayoutBuilder(
         builder: (context, constraints) {
@@ -73,23 +71,52 @@ class _ProfileInfoWidget extends StatelessWidget {
                 height: constraints.maxHeight * 0.85,
                 margin: const EdgeInsets.only(
                     left: 30, right: 32, top: 40, bottom: 40),
-                decoration: CustomDecorator.instance.avatarPhotoDecorator(),
+                decoration: ResumeBoxDecorator.instance.avatarPhotoDecorator(),
               ),
-              RotatedTextWidget(
+              _RotatedTextWidget(
                   text: ResumeTexts.name,
-                  textStyle: CustomDecorator.instance.nameDecorator(),
+                  textStyle: ResumeTextDecorator.instance.nameDecorator(),
                   containerSize: Size(constraints.maxWidth * 0.3,
                       constraints.maxHeight * 0.935),
                   rotate: 0),
-              RotatedTextWidget(
+              _RotatedTextWidget(
                   text: ResumeTexts.secondName,
-                  textStyle: CustomDecorator.instance.secondNameDecorator(),
+                  textStyle: ResumeTextDecorator.instance.secondNameDecorator(),
                   containerSize: Size(constraints.maxWidth * 0.66,
                       constraints.maxHeight * 0.65),
                   rotate: 0.5 * pi),
             ],
           );
         },
+      ),
+    );
+  }
+}
+
+class _RotatedTextWidget extends StatelessWidget {
+  final String text;
+  final TextStyle textStyle;
+  final Size containerSize;
+  final double rotate;
+
+  const _RotatedTextWidget({
+    required this.text,
+    required this.textStyle,
+    required this.containerSize,
+    required this.rotate,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      top: containerSize.height,
+      left: containerSize.width,
+      child: Transform.rotate(
+        angle: rotate,
+        child: Text(
+          text,
+          style: textStyle,
+        ),
       ),
     );
   }

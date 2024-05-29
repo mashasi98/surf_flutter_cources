@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:surf_flutter_cources/task-3_resume/resume_text.dart';
-import 'package:surf_flutter_cources/task-3_resume/widgets/decorator/custom_decorator.dart';
-import 'dart:ui';
+import 'package:surf_flutter_cources/task-3_resume/widgets/decorator/resume_box_decorator.dart';
 import '../common_widget/neon_text_widget.dart';
 
 class ContactWidget extends StatelessWidget {
@@ -18,7 +17,7 @@ class ContactWidget extends StatelessWidget {
             topColor: Color(0xFF42E4A6),
             bottomColor: Color(0xe742cce4)),
         Container(
-          decoration: CustomDecorator.instance.backgroundBorderDecorator(
+          decoration: ResumeBoxDecorator.instance.backgroundBorderDecorator(
               "assets/images/task-3/border_horizontal.png", BoxFit.fill),
           margin: const EdgeInsets.all(10),
           child: Container(
@@ -64,7 +63,7 @@ class _ContactRowWidget extends StatelessWidget {
         child: Row(
           children: [
             Container(
-              padding: const EdgeInsets.only(bottom: 10, right: 10),
+              padding: const EdgeInsets.only(bottom: 10, right: 10, left: 5),
               child: SvgPicture.asset(
                 icon,
                 height: 30,
@@ -80,10 +79,9 @@ class _ContactRowWidget extends StatelessWidget {
               maxLines: 2,
               style: GoogleFonts.pixelifySans(
                 color: Colors.white,
-                fontSize:23,
+                fontSize: 23,
                 height: 3,
                 fontWeight: FontWeight.bold,
-
               ),
             ),
           ],

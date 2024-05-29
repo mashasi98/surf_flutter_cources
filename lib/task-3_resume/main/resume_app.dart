@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:surf_flutter_cources/task-3_resume/widgets/about_me/about_me_widget.dart';
-import 'package:surf_flutter_cources/task-3_resume/widgets/decorator/custom_decorator.dart';
+import 'package:surf_flutter_cources/task-3_resume/widgets/decorator/resume_box_decorator.dart';
 import 'package:surf_flutter_cources/task-3_resume/widgets/greeting_widget/greeting_widget.dart';
 
 import '../widgets/contact_widget/contact_widget.dart';
@@ -12,7 +12,7 @@ class ResumeApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: CustomDecorator.instance.backgroundBorderPhotoDecorator(),
+        decoration: ResumeBoxDecorator.instance.backgroundBorderPhotoDecorator(),
         child: ListView(
           children: const [
             Column(

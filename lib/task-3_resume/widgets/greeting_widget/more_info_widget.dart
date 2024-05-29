@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:surf_flutter_cources/task-3_resume/widgets/decorator/custom_decorator.dart';
 
 import '../../resume_text.dart';
+import '../decorator/resume_text_decorator.dart';
 
 class MoreInfoWidget extends StatefulWidget {
   const MoreInfoWidget({super.key});
 
   @override
-  _MoreInfoWidgetState createState() => _MoreInfoWidgetState();
+  MoreInfoWidgetState createState() => MoreInfoWidgetState();
 }
 
-class _MoreInfoWidgetState extends State<MoreInfoWidget> {
+class MoreInfoWidgetState extends State<MoreInfoWidget> {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -26,7 +26,7 @@ class _MoreInfoWidgetState extends State<MoreInfoWidget> {
                   child: Text(
                     ResumeTexts.moreInfo,
                     textAlign: TextAlign.center,
-                    style: CustomDecorator.instance.infoTextDecorator(),
+                    style: ResumeTextDecorator.instance.infoTextDecorator(),
                   ),
                 ),
               ),
