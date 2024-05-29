@@ -31,8 +31,7 @@ class CustomDecorator {
     );
   }
 
-  BoxDecoration backgroundBorderDecorator(
-      String imagePath, BoxFit fit) {
+  BoxDecoration backgroundBorderDecorator(String imagePath, BoxFit fit) {
     return BoxDecoration(
       image: DecorationImage(
         image: AssetImage(imagePath),
@@ -131,5 +130,18 @@ class CustomDecorator {
           ..color = const Color(0xc8f8f8f8),
       ),
     );
+  }
+
+  TextStyle bodyTextDecorator() {
+    return GoogleFonts.tektur(
+        fontSize: 18,
+        color: const Color(0xFFFFFFFF),
+        shadows: [
+          const Shadow(
+            color: Color(0xFF00D0D1),
+            blurRadius: 2,
+            offset: Offset(-2, 1),
+          ),
+        ]);
   }
 }

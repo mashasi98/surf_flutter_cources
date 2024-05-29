@@ -12,7 +12,7 @@ class ResumeTexts {
   static const String secondName = "Sikorskaya";
   static const String email = "mashasi98@yandex.ru";
   static const String tg = "@MariaNsi";
-  static const String git = "https://github.com/mashasi98";
+  static const String git = "mashasi98";
   static const Map<String, String> aboutMe = {
     'ABOUT ME': 'Привет! Меня зовут Мария Николетта Анатольевна, мне 25 лет. '
         'Родилась в Венгрии, но в настоящее время живу в Краснодаре.'
@@ -41,4 +41,5 @@ class ResumeTexts {
   };
   static const String playerOne = 'PLayer\nOne';
   static const String moreInfo = 'MORE\nINFO';
+  static const String contacts = 'CONTACTS';
 }
