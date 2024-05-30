@@ -1,6 +1,8 @@
 name: surf_flutter_cources
 description: "A new Flutter project."
 
+publish_to: 'none'
+
 version: 1.0.0+1
 
 environment:
@@ -11,6 +13,9 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.6
+  google_fonts: ^6.2.1
+  auto_size_text: ^3.0.0
+  flutter_svg: ^2.0.10+1
 
 dev_dependencies:
   flutter_test:
@@ -22,6 +27,10 @@ flutter:
 
   uses-material-design: true
   assets:
+    - assets/images/
+    - assets/images/task-3/
+    - assets/images/task-3/arrow_down.gif
+    - assets/images/task-3/github.svg
     - assets/images/task-2/
 
 
