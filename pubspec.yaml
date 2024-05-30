@@ -1,9 +1,7 @@
 name: surf_flutter_cources
 description: "A new Flutter project."
-# The following line prevents the package from being accidentally published to
 
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-
+version: 1.0.0+1
 
 environment:
   sdk: '>=3.3.3 <4.0.0'
@@ -21,7 +19,9 @@ dev_dependencies:
   flutter_lints: ^4.0.0
 
 flutter:
+
   uses-material-design: true
   assets:
     - assets/images/task-2/
+
 
