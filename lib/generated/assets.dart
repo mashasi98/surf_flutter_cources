@@ -4,9 +4,12 @@ class Assets {
 
   static const String imagesTask3ArrowDown = 'assets/images/task-3/arrow_down.gif';
   static const String imagesTask3Github = 'assets/images/task-3/github.svg';
+  static const String task2Circle = 'assets/images/task-2/circle.png';
+  static const String task2Cq = 'assets/images/task-2/cq.png';
   static const String task3ArrowDown = 'assets/images/task-3/arrow_down.gif';
   static const String task3BorderHorizontal = 'assets/images/task-3/border_horizontal.png';
   static const String task3BorderVertical = 'assets/images/task-3/border_vertical.png';
+  static const String task3Email = 'assets/images/task-3/email.svg';
   static const String task3Foto = 'assets/images/task-3/foto.jpg';
   static const String task3Github = 'assets/images/task-3/github.svg';
   static const String task3MainBg = 'assets/images/task-3/main_bg.jpg';
