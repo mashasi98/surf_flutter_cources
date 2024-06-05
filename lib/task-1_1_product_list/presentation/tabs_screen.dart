@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'cheque_screen.dart';
 import 'empty_screen.dart';
 
 class TabsScreen extends StatefulWidget {
@@ -18,7 +19,7 @@ class _TabsScreenState extends State<TabsScreen> {
     EmptyScreen(),
     EmptyScreen(),
     EmptyScreen(),
-    ChaqueScreen(id: 56),
+    ChequeScreen(id: 56),
   ];
 
   @override

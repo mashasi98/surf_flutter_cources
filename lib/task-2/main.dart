@@ -7,6 +7,7 @@ void main() {
 }
 
 class MyGestureApp extends StatelessWidget {
+  // ignore: use_key_in_widget_constructors
   const MyGestureApp({Key? key});
 
   @override
@@ -23,6 +24,7 @@ class MyGestureApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
+  // ignore: use_key_in_widget_constructors
   const MyHomePage({Key? key});
 
   @override
@@ -40,9 +42,11 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class ChangeableWidget extends StatefulWidget {
+  // ignore: use_key_in_widget_constructors
   const ChangeableWidget({Key? key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _ChangeableWidgetState createState() => _ChangeableWidgetState();
 }
 

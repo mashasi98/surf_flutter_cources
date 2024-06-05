@@ -1,4 +1,11 @@
-enum CategoryType {
-   food, tech, care, drinks, drugs,
+enum Category {
+  food('Продукты питания'),
+  tech('Технологичные товары'),
+  care('Уход'),
+  drinks('Напитки'),
+  drugs('Медикаменты');
 
+  final String name;
+
+  const Category(this.name);
 }

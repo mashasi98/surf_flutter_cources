@@ -4,6 +4,7 @@ class Assets {
 
   static const String imagesTask3ArrowDown = 'assets/images/task-3/arrow_down.gif';
   static const String imagesTask3Github = 'assets/images/task-3/github.svg';
+  static const String shoppingListArrowBack = 'assets/images/shopping_list/arrow_back.svg';
   static const String task2Circle = 'assets/images/task-2/circle.png';
   static const String task2Cq = 'assets/images/task-2/cq.png';
   static const String task3ArrowDown = 'assets/images/task-3/arrow_down.gif';
