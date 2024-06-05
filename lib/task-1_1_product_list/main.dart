@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:surf_flutter_cources/task-1_1_product_list/presentation/tabs_screen.dart';
 
 import 'data/repository/shopping_list_repository.dart';
 
 void main() {
-  initializeDateFormatting('ru_RU', null).then(
-          (_) => runApp(const MyApp());
-  );
+  initializeDateFormatting('ru_RU', null).then((_) => runApp(const MyApp()));
 }
 
 final shoppingListRepository = ShoppingListRepository();
