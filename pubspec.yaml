@@ -18,7 +18,7 @@ dependencies:
   spider: ^4.2.2
   intl: ^0.19.0
   bottom_sheet: ^4.0.4
-  decimal: ^3.0.1
+  decimal: ^2.3.3
 
 dev_dependencies:
   flutter_test:
@@ -34,6 +34,7 @@ flutter:
     - assets/images/task-3/arrow_down.gif
     - assets/images/task-3/github.svg
     - assets/images/shopping_list/arrow_back.svg
+    - assets/images/shopping_list/loader.gif
 
 
 

@@ -22,7 +22,7 @@ class ProductEntity {
     this.sale = 0,
   });
 
-  _getDecimalPrice(int price) {
+  Decimal _getDecimalPrice(int price) {
     final priceString = (price / 100).toStringAsFixed(2);
     return Decimal.parse(priceString);
   }

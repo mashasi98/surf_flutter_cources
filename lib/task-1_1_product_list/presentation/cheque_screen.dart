@@ -76,15 +76,17 @@ class _ContentWidgetState extends State<_ContentWidget> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Row(
+        leading: IconButton(
+          icon: SvgPicture.asset(
+            'assets/images/shopping_list/arrow_back.svg',
+          ),
+          onPressed: () {
+            debugPrint('tap');
+          },
+        ),
+        title: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            IconButton(
-                icon: SvgPicture.asset(
-                  'arrow_back.svg',
-                  height: 12,
-                  width: 6,
-                ), onPressed: () {  },
-            ),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -97,6 +99,8 @@ class _ContentWidgetState extends State<_ContentWidget> {
             ),
           ],
         ),
+        // ],
+        // ),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(kToolbarHeight),
           child: Padding(
@@ -109,12 +113,11 @@ class _ContentWidgetState extends State<_ContentWidget> {
                     style: Theme.of(context).textTheme.headlineMedium,
                   ),
                 ),
-                FilledButton.icon(
+                IconButton(
                   onPressed: () {
                     _onPressedFilter();
                   },
                   icon: const Icon(Icons.sort),
-                  label: const Text("sort"),
                 ),
               ],
             ),
@@ -186,37 +189,36 @@ class _CategoryWidget extends StatelessWidget {
         Text(category),
         ...productOfCategory.sortByFilter(filter).map(
               (e) => ListTile(
-                title: Text(e.title),
-                trailing: Text(
-                  e.decimalPrice.toFormattedCurrency(),
-                ),
-              ),
+                  leading: Image.network(
+                    e.imageUrl,
+                    width: 100,
+                    height: 100,
+                    fit: BoxFit.fill,
+                    loadingBuilder: (BuildContext context, Widget child,
+                        ImageChunkEvent? loadingProgress) {
+                      if (loadingProgress == null) {
+                        return child;
+                      } else {
+                        return Image.asset(
+                          'assets/images/shopping_list/loader.gif',
+                          width: 100,
+                          height: 100,
+                        );
+                      }
+                    },
+                  ),
+                  title: Text(e.title),
+                  subtitle: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(e.amount.value.toString()),
+                      Text(e.decimalPrice.toFormattedCurrency()),
+                    ],
+                  )),
             ),
         const Divider(),
         if (isLastCategory) _FinanceWidget(products: products),
       ],
-    );
-  }
-}
-
-class _LoadWidget extends StatelessWidget {
-  const _LoadWidget();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: CircularProgressIndicator(),
-    );
-  }
-}
-
-class _ErrorWidget extends StatelessWidget {
-  const _ErrorWidget();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text("Произошла  ошибкка"),
     );
   }
 }
@@ -302,6 +304,28 @@ class _RowWidget extends StatelessWidget {
         ),
         Text(value, style: textTheme.headlineSmall),
       ],
+    );
+  }
+}
+
+class _LoadWidget extends StatelessWidget {
+  const _LoadWidget();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: CircularProgressIndicator(),
+    );
+  }
+}
+
+class _ErrorWidget extends StatelessWidget {
+  const _ErrorWidget();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: Text("Произошла  ошибкка"),
     );
   }
 }

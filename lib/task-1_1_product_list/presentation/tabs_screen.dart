@@ -39,7 +39,7 @@ class _TabsScreenState extends State<TabsScreen> {
           });
         },
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Каталог"),
+          BottomNavigationBarItem(icon: SvgPicture.asset('assets/images/shopping_list/katalog.svg') , label: "Каталог"),
           BottomNavigationBarItem(icon: Icon(Icons.search), label: "Поиск"),
           BottomNavigationBarItem(
               icon: Icon(Icons.shopping_cart), label: "Корзина"),
