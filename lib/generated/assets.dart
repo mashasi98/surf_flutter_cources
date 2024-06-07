@@ -2,16 +2,17 @@
 class Assets {
   Assets._();
 
-  static const String imagesShoppingListArrowBack = 'assets/images/shopping_list/arrow_back.svg';
-  static const String imagesShoppingListLoader = 'assets/images/shopping_list/loader.gif';
+  static const String imagesShoppingListPlaceholder = 'assets/images/shopping_list/placeholder.svg';
   static const String imagesTask3ArrowDown = 'assets/images/task-3/arrow_down.gif';
   static const String imagesTask3Github = 'assets/images/task-3/github.svg';
   static const String shoppingListArrowBack = 'assets/images/shopping_list/arrow_back.svg';
-  static const String shoppingListKatalog = 'assets/images/shopping_list/katalog.svg';
+  static const String shoppingListCatalog = 'assets/images/shopping_list/catalog.svg';
   static const String shoppingListLoader = 'assets/images/shopping_list/loader.gif';
   static const String shoppingListPersonOutline = 'assets/images/shopping_list/person_outline.svg';
+  static const String shoppingListPlaceholder = 'assets/images/shopping_list/placeholder.png';
   static const String shoppingListSearch = 'assets/images/shopping_list/search.svg';
   static const String shoppingListShoppingCard = 'assets/images/shopping_list/shopping_card.svg';
+  static const String shoppingListSort = 'assets/images/shopping_list/sort.svg';
   static const String task2Circle = 'assets/images/task-2/circle.png';
   static const String task2Cq = 'assets/images/task-2/cq.png';
   static const String task3ArrowDown = 'assets/images/task-3/arrow_down.gif';

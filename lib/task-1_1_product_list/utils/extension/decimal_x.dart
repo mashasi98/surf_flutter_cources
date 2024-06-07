@@ -7,7 +7,7 @@ extension DecimalX on Decimal {
 
     final currencyFormatter = NumberFormat.currency(
       locale: 'RU_ru',
-      symbol: symbol ?? 'P',
+      symbol: symbol ?? '',
       decimalDigits: decimalDigits ?? 2,
     );
     return currencyFormatter.format(DecimalIntl(this));

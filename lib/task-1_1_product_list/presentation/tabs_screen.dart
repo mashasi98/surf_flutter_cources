@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 import 'cheque_screen.dart';
 import 'empty_screen.dart';
@@ -24,33 +25,42 @@ class _TabsScreenState extends State<TabsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Scaffold(
       body: IndexedStack(
         index: _currentIndex,
         children: _pages,
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        items: const [
-          BottomNavigationBarItem(icon: SvgPicture.asset('assets/images/shopping_list/katalog.svg') , label: "Каталог"),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: "Поиск"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_cart), label: "Корзина"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.percent_rounded), label: "Личное"),
-        ],
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: theme.cardColor,
-        selectedItemColor: theme.primaryColor,
-        selectedFontSize: 10,
-        unselectedFontSize: 10,
+      bottomNavigationBar: SizedBox(
+        height: 83,
+        child: BottomNavigationBar(
+          currentIndex: _currentIndex,
+          onTap: (index) {
+            setState(() {
+              _currentIndex = index;
+            });
+          },
+          items: [
+            BottomNavigationBarItem(
+                icon:
+                    SvgPicture.asset('assets/images/shopping_list/catalog.svg'),
+                label: "Каталог"),
+            BottomNavigationBarItem(
+                icon:
+                    SvgPicture.asset('assets/images/shopping_list/search.svg'),
+                label: "Поиск"),
+            BottomNavigationBarItem(
+                icon: SvgPicture.asset(
+                    'assets/images/shopping_list/shopping_card.svg'),
+                label: "Корзина"),
+            BottomNavigationBarItem(
+                icon: SvgPicture.asset(
+                  'assets/images/shopping_list/person_outline.svg',
+                ),
+                label: "Личное"),
+          ],
+          selectedFontSize: 10,
+          iconSize: 24,
+        ),
       ),
     );
   }

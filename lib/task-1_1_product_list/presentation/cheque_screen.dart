@@ -13,6 +13,7 @@ import 'package:surf_flutter_cources/task-1_1_product_list/utils/extension/produ
 import '../domain/entity/cheque_entity.dart';
 import '../domain/entity/product_entity.dart';
 import '../main.dart';
+import '../theme/finance_widget_theme.dart';
 import 'filter_screen.dart';
 
 class ChequeScreen extends StatefulWidget {
@@ -21,7 +22,6 @@ class ChequeScreen extends StatefulWidget {
   const ChequeScreen({super.key, required this.id});
 
   @override
-  // ignore: library_private_types_in_public_api
   _ChequeScreenState createState() => _ChequeScreenState();
 }
 
@@ -74,76 +74,82 @@ class _ContentWidgetState extends State<_ContentWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        leading: IconButton(
-          icon: SvgPicture.asset(
-            'assets/images/shopping_list/arrow_back.svg',
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(120.0),
+        child: AppBar(
+          toolbarOpacity: 1.0,
+          backgroundColor: Colors.white,
+          centerTitle: true,
+          leading: IconButton(
+            icon:
+                SvgPicture.asset('assets/images/shopping_list/arrow_back.svg'),
+            onPressed: () {},
+            iconSize: 24,
           ),
-          onPressed: () {
-            debugPrint('tap');
-          },
-        ),
-        title: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text("Чек № ${widget.data.id}"),
-                Text(
-                  widget.data.date.toStringDateAndTime(),
-                  style: Theme.of(context).textTheme.labelSmall,
-                )
-              ],
-            ),
-          ],
-        ),
-        // ],
-        // ),
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(kToolbarHeight),
-          child: Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20, bottom: 8),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    'Список покупок',
-                    style: Theme.of(context).textTheme.headlineMedium,
+          title: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Чек № ${widget.data.id}",
+                style: Theme.of(context).textTheme.headlineLarge,
+              ),
+              Text(
+                widget.data.date.toStringDateAndTime(),
+                style: Theme.of(context).textTheme.labelSmall,
+              )
+            ],
+          ),
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(kToolbarHeight),
+            child: Padding(
+              padding: const EdgeInsets.only(
+                  left: 20, right: 20, bottom: 10, top: 10),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      'Список покупок',
+                      style: Theme.of(context).textTheme.headlineLarge,
+                    ),
                   ),
-                ),
-                IconButton(
-                  onPressed: () {
-                    _onPressedFilter();
-                  },
-                  icon: const Icon(Icons.sort),
-                ),
-              ],
+                  IconButton(
+                    onPressed: () {
+                      _onPressedFilter();
+                    },
+                    icon: SvgPicture.asset(
+                      'assets/images/shopping_list/sort.svg',
+                    ),
+                    iconSize: 32,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
       ),
-      body: ListView.builder(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 20),
-        itemCount: Category.values.length,
-        itemBuilder: (_, i) {
-          final category = Category.values[i];
-          final categoryProducts = widget.data.products
-              .where((product) => product.category == category)
-              .toList();
-          final isLastCategory = i == Category.values.length - 1;
+      body: Container(
+        color: Colors.white,
+        child: ListView.builder(
+          padding: const EdgeInsets.symmetric(vertical: 20),
+          itemCount: Category.values.length,
+          itemBuilder: (_, i) {
+            final category = Category.values[i];
+            final categoryProducts = widget.data.products
+                .where((product) => product.category == category)
+                .toList();
+            final isLastCategory = i == Category.values.length - 1;
 
-          return categoryProducts.isNotEmpty
-              ? _CategoryWidget(
-                  category: category.name,
-                  productOfCategory: categoryProducts,
-                  products: widget.data.products,
-                  isLastCategory: isLastCategory,
-                  filter: _currentFilter,
-                )
-              : const SizedBox();
-        },
+            return categoryProducts.isNotEmpty
+                ? _CategoryWidget(
+                    category: category.name,
+                    productOfCategory: categoryProducts,
+                    products: widget.data.products,
+                    isLastCategory: isLastCategory,
+                    sortingTypeFilter: _currentFilter,
+                  )
+                : const SizedBox();
+          },
+        ),
       ),
     );
   }
@@ -172,28 +178,30 @@ class _CategoryWidget extends StatelessWidget {
   final List<ProductEntity> productOfCategory;
   final List<ProductEntity> products;
   final bool isLastCategory;
-  final SortingType filter;
+  final SortingType sortingTypeFilter;
 
   const _CategoryWidget(
       {required this.category,
       required this.productOfCategory,
       required this.products,
       required this.isLastCategory,
-      required this.filter});
+      required this.sortingTypeFilter});
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisSize: MainAxisSize.min,
       children: [
-        Text(category),
-        ...productOfCategory.sortByFilter(filter).map(
+        if (SortingType.typeFromZ.type == sortingTypeFilter.type ||
+            SortingType.typeFromA.type == sortingTypeFilter.type)
+          Text(category),
+        ...productOfCategory.sortByFilter(sortingTypeFilter).map(
               (e) => ListTile(
-                  leading: Image.network(
+                leading: SizedBox(
+                  height: 68,
+                  width: 68,
+                  child: Image.network(
                     e.imageUrl,
-                    width: 100,
-                    height: 100,
-                    fit: BoxFit.fill,
+                    fit: BoxFit.cover,
                     loadingBuilder: (BuildContext context, Widget child,
                         ImageChunkEvent? loadingProgress) {
                       if (loadingProgress == null) {
@@ -201,23 +209,45 @@ class _CategoryWidget extends StatelessWidget {
                       } else {
                         return Image.asset(
                           'assets/images/shopping_list/loader.gif',
-                          width: 100,
-                          height: 100,
+                          fit: BoxFit.contain,
                         );
                       }
                     },
+                    errorBuilder: (context, error, stackTrace) {
+                      return SvgPicture.asset(
+                        height: 68,
+                        width: 68,
+                        'assets/images/shopping_list/placeholder.svg',
+                        fit: BoxFit.fill,
+                      );
+                    },
                   ),
-                  title: Text(e.title),
-                  subtitle: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(e.amount.value.toString()),
-                      Text(e.decimalPrice.toFormattedCurrency()),
-                    ],
-                  )),
+                ),
+                title: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      e.title,
+                      textAlign: TextAlign.start,
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(e.amount.showAmount()),
+                        Text(e.decimalPrice.toFormattedCurrency()),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
             ),
         const Divider(),
-        if (isLastCategory) _FinanceWidget(products: products),
+        if (isLastCategory)
+          SizedBox(
+            height: 118,
+            child: _FinanceWidget(products: products),
+          ),
       ],
     );
   }
@@ -239,14 +269,29 @@ class _FinanceWidgetState extends State<_FinanceWidget> {
     final discount = _getDisscount(widget.products);
     final total = fullTotal - discount;
 
-    return Column(children: [
-      const Text('В вашей покупке'),
-      _RowWidget(
-          description: _plural(widget.products.length),
-          value: fullTotal.toFormattedCurrency()),
-      _RowWidget(description: 'Скидка', value: discount.toFormattedCurrency()),
-      _RowWidget(description: 'Итого', value: total.toFormattedCurrency())
-    ]);
+    return Theme(
+      data: FinanceWidgetTheme.themeData(context),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('В вашей покупке',
+              style: Theme.of(context).textTheme.labelLarge),
+          const SizedBox(height: 10),
+          _RowWidget(
+            description: _plural(widget.products.length),
+            value: fullTotal.toFormattedCurrency(),
+          ),
+          const SizedBox(height: 10),
+          _RowWidget(
+              description: 'Скидка', value: discount.toFormattedCurrency()),
+          const SizedBox(height: 10),
+          _RowWidget(
+              description: 'Итого',
+              value: total.toFormattedCurrency(),
+              isBoldTheme: true)
+        ],
+      ),
+    );
   }
 
   String _plural(int count) {
@@ -290,8 +335,13 @@ class _FinanceWidgetState extends State<_FinanceWidget> {
 class _RowWidget extends StatelessWidget {
   final String description;
   final String value;
+  final bool isBoldTheme;
 
-  const _RowWidget({required this.description, required this.value});
+  const _RowWidget({
+    required this.description,
+    required this.value,
+    this.isBoldTheme = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -300,9 +350,12 @@ class _RowWidget extends StatelessWidget {
     return Row(
       children: [
         Expanded(
-          child: Text(description, style: textTheme.bodyMedium),
+          child: Text(description,
+              style:
+                  (isBoldTheme) ? textTheme.labelLarge : textTheme.labelMedium),
         ),
-        Text(value, style: textTheme.headlineSmall),
+        Text('$value руб',
+            style: (isBoldTheme) ? textTheme.bodyLarge : textTheme.bodyMedium),
       ],
     );
   }
