@@ -13,6 +13,7 @@ class Assets {
   static const String shoppingListSearch = 'assets/images/shopping_list/search.svg';
   static const String shoppingListShoppingCard = 'assets/images/shopping_list/shopping_card.svg';
   static const String shoppingListSort = 'assets/images/shopping_list/sort.svg';
+  static const String shoppingListSortSelected = 'assets/images/shopping_list/sort_selected.svg';
   static const String task2Circle = 'assets/images/task-2/circle.png';
   static const String task2Cq = 'assets/images/task-2/cq.png';
   static const String task3ArrowDown = 'assets/images/task-3/arrow_down.gif';

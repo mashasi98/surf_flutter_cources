@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:surf_flutter_cources/task-1_1_product_list/theme/custom_filter_screen_theme.dart';
 
 import '../domain/entity/sorting_type.dart';
 
@@ -22,27 +23,51 @@ class _FilterScreenState extends State<FilterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: ListView.builder(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 20),
-        itemCount: FilterType.values.length,
-        itemBuilder: (_, i) {
-          final type = FilterType.values[i];
-          final sortingList =
-              SortingType.values.where((e) => e.type == type).toList();
-          final isLastType = i == FilterType.values.length - 1;
+    var theme = CustomFilterScreenTheme.customFilterScreenTheme(
+        Theme.of(context).textTheme);
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            margin: const EdgeInsets.all(20),
+            alignment: Alignment.centerLeft,
+            child: Text(
+              'Сортировка',
+              style: theme.displayLarge,
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 20),
+              itemCount: FilterType.values.length,
+              itemBuilder: (_, i) {
+                final type = FilterType.values[i];
+                final sortingList =
+                    SortingType.values.where((e) => e.type == type).toList();
+                final isLastType = i == FilterType.values.length - 1;
 
-          return sortingList.isNotEmpty
-              ? _FilterTypeWidget(
-                  type: type,
-                  sortingList: sortingList,
-                  selectedFilter: _selectedFilter,
-                  isLastType: isLastType,
-                  onChanged: _onChanged,
-                  onDone: _onPressDone,
-                )
-              : const SizedBox();
-        },
+                return sortingList.isNotEmpty
+                    ? _FilterTypeWidget(
+                        type: type,
+                        sortingList: sortingList,
+                        selectedFilter: _selectedFilter,
+                        isLastType: isLastType,
+                        onChanged: _onChanged,
+                        onDone: _onPressDone,
+                      )
+                    : const SizedBox();
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -79,22 +104,56 @@ class _FilterTypeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = CustomFilterScreenTheme.customFilterScreenTheme(Theme.of(context).textTheme);
     return Column(
       mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (type != FilterType.none) Text(type.name),
+        if (type != FilterType.none)
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 25),
+            child: Text(
+              type.name,
+              style: theme.bodySmall,
+            ),
+          ),
         ...sortingList.map(
           (e) => RadioListTile<SortingType>(
-            title: Text(e.name),
+            activeColor: const Color(0xFF67CD00 ),
+            title: Text(
+              e.name,
+              style: theme.bodyMedium,
+            ),
             value: e,
             groupValue: selectedFilter,
             onChanged: onChanged,
           ),
         ),
-        const Divider(),
+        if (!isLastType)
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 20),
+            child: const Divider(
+              color: Color(0xFFF1F1F1),
+            ),
+          ),
         if (isLastType) ...[
           const SizedBox(height: 20),
-          FilledButton(onPressed: onDone, child: const Text('Готово')),
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 20),
+            width: double.infinity,
+            child: FilledButton(
+              onPressed: onDone,
+              style: FilledButton.styleFrom(
+                backgroundColor: const Color(0xFF67CD00),
+                minimumSize: const Size.fromHeight(60),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: Text('Готово',
+                  style: theme.bodyLarge?.copyWith(color: Colors.white)),
+            ),
+          ),
         ],
       ],
     );

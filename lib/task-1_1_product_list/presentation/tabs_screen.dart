@@ -15,6 +15,7 @@ class TabsScreen extends StatefulWidget {
 
 class _TabsScreenState extends State<TabsScreen> {
   int _currentIndex = 3;
+  // bool _isBottomSheetVisible = true;
 
   final List<Widget> _pages = const [
     EmptyScreen(),

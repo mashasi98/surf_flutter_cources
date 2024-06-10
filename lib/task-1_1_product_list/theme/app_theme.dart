@@ -9,7 +9,7 @@ class AppTheme {
     final base = ThemeData.light();
     return base.copyWith(
       colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
-      textTheme: CustomTextTheme.customTextTheme(base.textTheme),
+      textTheme: CustomAppTheme.customTextTheme(base.textTheme),
       appBarTheme: CustomAppBarTheme.customAppBarTheme(base.appBarTheme),
       bottomNavigationBarTheme:
           CustomBottomNavigationBarTheme.customBottomNavigationBarTheme(

@@ -18,7 +18,7 @@ extension ProductListX on List<ProductEntity> {
 
   List<ProductEntity> _sortByName(List<ProductEntity> list,
       {bool isFromA = true}) {
-    final result = list;
+    final result = List.of(list);
     result.sort((a, b) =>
         isFromA ? a.title.compareTo(b.title) : b.title.compareTo(a.title));
     return result;
@@ -26,7 +26,7 @@ extension ProductListX on List<ProductEntity> {
 
   List<ProductEntity> _sortByPrice(List<ProductEntity> list,
       {bool isCheapFirst = true}) {
-    final result = list;
+    final result = List.of(list);
     result.sort((a, b) =>
         isCheapFirst ? a.price.compareTo(b.price) : b.price.compareTo(a.price));
     return result;

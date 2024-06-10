@@ -1,20 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CustomBottomNavigationBarTheme {
   static BottomNavigationBarThemeData customBottomNavigationBarTheme(
       BottomNavigationBarThemeData base) {
-    return const BottomNavigationBarThemeData(
+    return BottomNavigationBarThemeData(
       backgroundColor: Colors.white,
       selectedItemColor: Colors.green,
-      unselectedItemColor: Color(0xff60607b),
+      unselectedItemColor: const Color(0xff60607b),
       elevation: 10,
       showSelectedLabels: true,
       showUnselectedLabels: true,
       type: BottomNavigationBarType.fixed,
-      selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
-      unselectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
-      selectedIconTheme: IconThemeData(color: Colors.green),
-      unselectedIconTheme: IconThemeData(color: Color(0xff60607b)),
+      selectedLabelStyle: GoogleFonts.sora(
+        textStyle: const TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 10,
+          color: Colors.green,
+        ),
+      ),
+      unselectedLabelStyle: GoogleFonts.sora(
+        textStyle: const TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 10,
+          color: Color(0xff60607b),
+        ),
+      ),
+      selectedIconTheme: const IconThemeData(color: Colors.green),
+      unselectedIconTheme: const IconThemeData(color: Color(0xff60607b)),
     );
   }
 }

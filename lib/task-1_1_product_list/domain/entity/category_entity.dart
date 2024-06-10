@@ -8,4 +8,9 @@ enum Category {
   final String name;
 
   const Category(this.name);
+
+  @override
+  String toString() {
+    return name;
+  }
 }

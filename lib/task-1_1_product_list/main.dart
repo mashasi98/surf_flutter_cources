@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Список покупок',
-      theme:  AppTheme.theme,
+      theme: AppTheme.theme,
       home: const TabsScreen(),
     );
   }

@@ -6,6 +6,8 @@ import 'package:intl/intl.dart';
 import 'package:surf_flutter_cources/task-1_1_product_list/domain/entity/category_entity.dart';
 import 'package:surf_flutter_cources/task-1_1_product_list/domain/entity/sorting_type.dart';
 import 'package:surf_flutter_cources/task-1_1_product_list/presentation/empty_screen.dart';
+import 'package:surf_flutter_cources/task-1_1_product_list/theme/custom_theme.dart';
+import 'package:surf_flutter_cources/task-1_1_product_list/utils/extension/category_list_x.dart';
 import 'package:surf_flutter_cources/task-1_1_product_list/utils/extension/date_time_x.dart';
 import 'package:surf_flutter_cources/task-1_1_product_list/utils/extension/decimal_x.dart';
 import 'package:surf_flutter_cources/task-1_1_product_list/utils/extension/product_list_x.dart';
@@ -13,7 +15,6 @@ import 'package:surf_flutter_cources/task-1_1_product_list/utils/extension/produ
 import '../domain/entity/cheque_entity.dart';
 import '../domain/entity/product_entity.dart';
 import '../main.dart';
-import '../theme/finance_widget_theme.dart';
 import 'filter_screen.dart';
 
 class ChequeScreen extends StatefulWidget {
@@ -40,6 +41,7 @@ class _ChequeScreenState extends State<ChequeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    CustomAppTheme.customTextTheme(Theme.of(context).textTheme);
     return FutureBuilder<ChequeEntity>(
       future: _data,
       builder: (_, snapshot) {
@@ -49,7 +51,7 @@ class _ChequeScreenState extends State<ChequeScreen> {
           } else if (snapshot.hasData) {
             final data = snapshot.data;
             return data != null
-                ? _ContentWidget(data: data)
+                ? _ContentWidget(chequeData: data)
                 : const EmptyScreen();
           }
         }
@@ -60,9 +62,9 @@ class _ChequeScreenState extends State<ChequeScreen> {
 }
 
 class _ContentWidget extends StatefulWidget {
-  final ChequeEntity data;
+  final ChequeEntity chequeData;
 
-  const _ContentWidget({required this.data});
+  const _ContentWidget({required this.chequeData});
 
   @override
   State<StatefulWidget> createState() => _ContentWidgetState();
@@ -70,9 +72,11 @@ class _ContentWidget extends StatefulWidget {
 
 class _ContentWidgetState extends State<_ContentWidget> {
   SortingType _currentFilter = SortingType.none;
+  bool _isCategorySelected = false;
 
   @override
   Widget build(BuildContext context) {
+    var theme = CustomAppTheme.customTextTheme(Theme.of(context).textTheme);
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(120.0),
@@ -86,18 +90,8 @@ class _ContentWidgetState extends State<_ContentWidget> {
             onPressed: () {},
             iconSize: 24,
           ),
-          title: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "Чек № ${widget.data.id}",
-                style: Theme.of(context).textTheme.headlineLarge,
-              ),
-              Text(
-                widget.data.date.toStringDateAndTime(),
-                style: Theme.of(context).textTheme.labelSmall,
-              )
-            ],
+          title: _ChequeAppBarWidget(
+            chequeData: widget.chequeData,
           ),
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(kToolbarHeight),
@@ -109,16 +103,20 @@ class _ContentWidgetState extends State<_ContentWidget> {
                   Expanded(
                     child: Text(
                       'Список покупок',
-                      style: Theme.of(context).textTheme.headlineLarge,
+                      style: theme.displayLarge,
                     ),
                   ),
                   IconButton(
                     onPressed: () {
                       _onPressedFilter();
                     },
-                    icon: SvgPicture.asset(
-                      'assets/images/shopping_list/sort.svg',
-                    ),
+                    icon: _isCategorySelected
+                        ? SvgPicture.asset(
+                            'assets/images/shopping_list/sort_selected.svg',
+                          )
+                        : SvgPicture.asset(
+                            'assets/images/shopping_list/sort.svg',
+                          ),
                     iconSize: 32,
                   ),
                 ],
@@ -129,26 +127,9 @@ class _ContentWidgetState extends State<_ContentWidget> {
       ),
       body: Container(
         color: Colors.white,
-        child: ListView.builder(
-          padding: const EdgeInsets.symmetric(vertical: 20),
-          itemCount: Category.values.length,
-          itemBuilder: (_, i) {
-            final category = Category.values[i];
-            final categoryProducts = widget.data.products
-                .where((product) => product.category == category)
-                .toList();
-            final isLastCategory = i == Category.values.length - 1;
-
-            return categoryProducts.isNotEmpty
-                ? _CategoryWidget(
-                    category: category.name,
-                    productOfCategory: categoryProducts,
-                    products: widget.data.products,
-                    isLastCategory: isLastCategory,
-                    sortingTypeFilter: _currentFilter,
-                  )
-                : const SizedBox();
-          },
+        child: _ProductsViewWidget(
+          currentFilter: _currentFilter,
+          chequeData: widget.chequeData,
         ),
       ),
     );
@@ -167,89 +148,314 @@ class _ContentWidgetState extends State<_ContentWidget> {
       setState(
         () {
           _currentFilter = filter;
+          _isCategorySelected = !_isCategorySelected;
         },
       );
     }
   }
 }
 
-class _CategoryWidget extends StatelessWidget {
-  final String category;
-  final List<ProductEntity> productOfCategory;
-  final List<ProductEntity> products;
-  final bool isLastCategory;
-  final SortingType sortingTypeFilter;
+class _ChequeAppBarWidget extends StatelessWidget {
+  final ChequeEntity chequeData;
 
-  const _CategoryWidget(
-      {required this.category,
-      required this.productOfCategory,
-      required this.products,
-      required this.isLastCategory,
-      required this.sortingTypeFilter});
+  const _ChequeAppBarWidget({
+    required this.chequeData,
+  });
 
   @override
   Widget build(BuildContext context) {
+    var theme = CustomAppTheme.customTextTheme(Theme.of(context).textTheme);
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        if (SortingType.typeFromZ.type == sortingTypeFilter.type ||
-            SortingType.typeFromA.type == sortingTypeFilter.type)
-          Text(category),
-        ...productOfCategory.sortByFilter(sortingTypeFilter).map(
-              (e) => ListTile(
-                leading: SizedBox(
-                  height: 68,
-                  width: 68,
-                  child: Image.network(
-                    e.imageUrl,
-                    fit: BoxFit.cover,
-                    loadingBuilder: (BuildContext context, Widget child,
-                        ImageChunkEvent? loadingProgress) {
-                      if (loadingProgress == null) {
-                        return child;
-                      } else {
-                        return Image.asset(
-                          'assets/images/shopping_list/loader.gif',
-                          fit: BoxFit.contain,
-                        );
-                      }
-                    },
-                    errorBuilder: (context, error, stackTrace) {
-                      return SvgPicture.asset(
-                        height: 68,
-                        width: 68,
-                        'assets/images/shopping_list/placeholder.svg',
-                        fit: BoxFit.fill,
-                      );
-                    },
-                  ),
-                ),
-                title: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      e.title,
-                      textAlign: TextAlign.start,
-                    ),
-                    const SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(e.amount.showAmount()),
-                        Text(e.decimalPrice.toFormattedCurrency()),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-        const Divider(),
-        if (isLastCategory)
-          SizedBox(
-            height: 118,
-            child: _FinanceWidget(products: products),
-          ),
+        Text(
+          "Чек № ${chequeData.id}",
+          style: theme.displayLarge,
+        ),
+        Text(
+          chequeData.date.toStringDateAndTime(),
+          style: theme.labelSmall,
+        )
       ],
     );
+  }
+}
+
+class _ProductsViewWidget extends StatelessWidget {
+  final SortingType currentFilter;
+  final ChequeEntity chequeData;
+
+  const _ProductsViewWidget({
+    required this.currentFilter,
+    required this.chequeData,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    var screenWidth = MediaQuery.of(context).size.width;
+    if (chequeData.products.isNotEmpty) {
+      final bool isSortByCategory = currentFilter == SortingType.typeFromZ ||
+          currentFilter == SortingType.typeFromA;
+      final List<dynamic> sortedList = _getSortedList(isSortByCategory);
+      final sortedLength = sortedList.length;
+      return SizedBox(
+        width: screenWidth,
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+                itemCount: sortedLength,
+                itemBuilder: (_, i) {
+                  final bool isLastCategory = i == sortedLength - 1;
+                  final categoryProducts = chequeData.products
+                      .where((product) => sortedList[i] == product.category)
+                      .toList();
+                  if (sortedList.isEmpty) return const SizedBox();
+                  if (isSortByCategory) {
+                    if (categoryProducts.isEmpty) return const SizedBox();
+                    final category = sortedList[i];
+                    return _CategoryWidget(
+                      category: category.name,
+                      productsOfCategory: categoryProducts,
+                      filter: currentFilter,
+                      products: chequeData.products,
+                      isLastElement: isLastCategory,
+                    );
+                  } else {
+                    final product = sortedList[i];
+                    return _ProductWidget(
+                      product: product,
+                      isLastElement: isLastCategory,
+                      products: sortedList as List<ProductEntity>,
+                    );
+                  }
+                },
+              ),
+            ),
+          ],
+        ),
+      );
+    } else {
+      return const SizedBox();
+    }
+  }
+
+  List<dynamic> _getSortedList(bool isSortByCategory) {
+    return isSortByCategory
+        ? Category.values.sortByCategory(currentFilter)
+        : chequeData.products.sortByFilter(currentFilter);
+  }
+}
+
+class _ProductWidget extends StatelessWidget {
+  final ProductEntity product;
+  final bool isLastElement;
+  final List<ProductEntity> products;
+
+  const _ProductWidget({
+    required this.product,
+    required this.isLastElement,
+    required this.products,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 15),
+      child: Column(
+        children: [
+          _ItemInfoWidget(
+            item: product,
+            isLastItem: isLastElement,
+            products: products,
+          ),
+          if (isLastElement) _FinanceWidget(products: products),
+        ],
+      ),
+    );
+  }
+}
+
+class _CategoryWidget extends StatelessWidget {
+  final String category;
+  final List<ProductEntity> productsOfCategory;
+  final List<ProductEntity> products;
+  final SortingType filter;
+  final bool isLastElement;
+
+  const _CategoryWidget(
+      {required this.category,
+    required this.productsOfCategory,
+    required this.filter,
+    required this.products,
+    required this.isLastElement,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    var theme = CustomAppTheme.customTextTheme(Theme.of(context).textTheme);
+    var screenWidth = MediaQuery.of(context).size.width;
+    return Container(
+      width: screenWidth,
+      margin: const EdgeInsets.symmetric(horizontal: 15),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(category, style: theme.bodyLarge),
+          const SizedBox(
+            height: 15,
+          ),
+          if (productsOfCategory.isNotEmpty)
+          ...productsOfCategory.map(
+            (productOfCategory) => _ItemInfoWidget(
+              item: productOfCategory,
+              isLastItem: productOfCategory == productsOfCategory.last,
+              products: products,
+            ),
+          ),
+          if (isLastElement) _FinanceWidget(products: products),
+        ],
+      ),
+    );
+  }
+}
+
+class _ItemInfoWidget extends StatelessWidget {
+  final ProductEntity item;
+  final bool isLastItem;
+  final List<ProductEntity> products;
+
+  const _ItemInfoWidget({
+    required this.item,
+    required this.isLastItem,
+    required this.products,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    var theme = CustomAppTheme.customTextTheme(Theme.of(context).textTheme);
+
+    return LayoutBuilder(builder: (context, constraints) {
+      return Container(
+        width: constraints.maxWidth,
+        margin: const EdgeInsets.only(bottom: 20, right: 10),
+        child: Column(
+          children: [
+            Container(
+              margin: const EdgeInsets.only(bottom: 10),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: Image.network(
+                      item.imageUrl,
+                      height: 68,
+                      width: 68,
+                      fit: BoxFit.fill,
+                      errorBuilder: (context, object, stackTrace) {
+                        return SvgPicture.asset(
+                            'assets/images/shopping_list/placeholder.svg');
+                      },
+                      loadingBuilder: (BuildContext context, Widget child,
+                          ImageChunkEvent? loadingProgress) {
+                        if (loadingProgress == null) {
+                          return child;
+                        } else {
+                          return Image.asset(
+                            'assets/images/shopping_list/loader.gif',
+                            height: 68,
+                            width: 68,
+                            fit: BoxFit.fill,
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: SizedBox(
+                      height: 68,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: 3,
+                            child: Text(item.title, style: theme.bodyMedium),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Expanded(
+                                  flex: 1,
+                                  child: Text(
+                                    item.amount.showAmount(),
+                                    style: theme.bodyMedium,
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Row(
+                                    children: [
+                                      if (item.sale > 0)
+                                        Expanded(
+                                          flex: 2,
+                                          child: Text(
+                                            item.decimalPrice.toFormattedCurrency(),
+                                            style: theme.bodyMedium?.copyWith(
+                                              color: const Color(0xFFB5B5B5),
+                                              decoration:
+                                                  TextDecoration.lineThrough,
+                                              decorationColor:
+                                                  const Color(0xFFB5B5B5),
+                                            ),
+                                            textAlign: TextAlign.end,
+                                          ),
+                                        ),
+                                      Expanded(
+                                        flex: 2,
+                                        child: Text(
+                                          DecimalX.calculateDiscountForProduct(
+                                            item.decimalPrice,
+                                            item.sale.toString(),
+                                          ).toFormattedCurrency(),
+                                          style: item.sale > 0
+                                              ? theme.bodyMedium?.copyWith(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: const Color(0xFFFF0000),
+                                                )
+                                              : theme.bodyMedium?.copyWith(
+                                                  fontWeight: FontWeight.bold),
+                                          textAlign: TextAlign.end,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            if (isLastItem)
+              const Padding(
+                padding: EdgeInsets.only(top: 10 ),
+                child: Divider(thickness: 0.5, height: 0.5),
+              ),
+          ],
+        ),
+      );
+    });
   }
 }
 
@@ -266,31 +472,27 @@ class _FinanceWidgetState extends State<_FinanceWidget> {
   @override
   Widget build(BuildContext context) {
     final fullTotal = _getFullTotal(widget.products);
-    final discount = _getDisscount(widget.products);
+    final discount = _getDiscount(widget.products);
     final total = fullTotal - discount;
-
-    return Theme(
-      data: FinanceWidgetTheme.themeData(context),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('В вашей покупке',
-              style: Theme.of(context).textTheme.labelLarge),
-          const SizedBox(height: 10),
-          _RowWidget(
-            description: _plural(widget.products.length),
-            value: fullTotal.toFormattedCurrency(),
-          ),
-          const SizedBox(height: 10),
-          _RowWidget(
-              description: 'Скидка', value: discount.toFormattedCurrency()),
-          const SizedBox(height: 10),
-          _RowWidget(
-              description: 'Итого',
-              value: total.toFormattedCurrency(),
-              isBoldTheme: true)
-        ],
-      ),
+    final theme = CustomAppTheme.customTextTheme(Theme.of(context).textTheme);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('В вашей покупке', style: theme.bodyLarge),
+        const SizedBox(height: 10),
+        _SumInfoWidget(
+          description: _plural(widget.products.length),
+          value: fullTotal.toFormattedCurrency(),
+        ),
+        const SizedBox(height: 10),
+        _SumInfoWidget(
+            description: 'Скидка', value: discount.toFormattedCurrency()),
+        const SizedBox(height: 10),
+        _SumInfoWidget(
+            description: 'Итого',
+            value: total.toFormattedCurrency(),
+            isBoldTheme: true)
+      ],
     );
   }
 
@@ -311,33 +513,30 @@ class _FinanceWidgetState extends State<_FinanceWidget> {
         (previousValue, element) => previousValue + element.decimalPrice);
   }
 
-  Decimal _getDisscount(List<ProductEntity> products) {
-    final discount = products.where((element) => element.sale > 0).toList();
-    return discount.isNotEmpty
+  Decimal _getDiscount(List<ProductEntity> products) {
+    final discountedProducts =
+        products.where((element) => element.sale > 0).toList();
+    return discountedProducts.isEmpty
         ? Decimal.zero
-        : discount.fold<Decimal>(
+        : discountedProducts.fold<Decimal>(
             Decimal.zero,
             (previousValue, element) =>
                 previousValue +
-                _calculateDiscountForProduct(
-                    element.decimalPrice, element.sale.toString()),
+                DecimalX.calculateDiscountForProduct(
+                  element.decimalPrice,
+                  element.sale.toString(),
+                ),
           );
   }
 
-  Decimal _calculateDiscountForProduct(Decimal price, String discountPercent) {
-    final discountAmount =
-        (price * Decimal.parse(discountPercent) / Decimal.fromInt(100))
-            .toDecimal();
-    return price - discountAmount;
-  }
 }
 
-class _RowWidget extends StatelessWidget {
+class _SumInfoWidget extends StatelessWidget {
   final String description;
   final String value;
   final bool isBoldTheme;
 
-  const _RowWidget({
+  const _SumInfoWidget({
     required this.description,
     required this.value,
     this.isBoldTheme = false,
@@ -351,11 +550,13 @@ class _RowWidget extends StatelessWidget {
       children: [
         Expanded(
           child: Text(description,
-              style:
-                  (isBoldTheme) ? textTheme.labelLarge : textTheme.labelMedium),
+            style: (isBoldTheme) ? textTheme.labelLarge : textTheme.labelMedium,
+          ),
         ),
-        Text('$value руб',
-            style: (isBoldTheme) ? textTheme.bodyLarge : textTheme.bodyMedium),
+        Text(value,
+            style: (isBoldTheme)
+                ? textTheme.bodyLarge
+                : textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold)),
       ],
     );
   }

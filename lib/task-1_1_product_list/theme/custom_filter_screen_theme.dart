@@ -1,17 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class CustomAppBarTheme {
-  static AppBarTheme customAppBarTheme(AppBarTheme base) {
-    return base.copyWith(
-      foregroundColor: Colors.white,
-      surfaceTintColor: Colors.white,
-      elevation: 8,
-
-    );
-  }
-
-  static TextTheme customAppBarTextTheme(TextTheme base) {
+class CustomFilterScreenTheme {
+  static TextTheme customFilterScreenTheme(TextTheme base) {
     return base.copyWith(
       displayLarge: GoogleFonts.sora(
         textStyle: base.displayLarge?.copyWith(
@@ -20,13 +11,20 @@ class CustomAppBarTheme {
           color: const Color(0xFF252849),
         ),
       ),
-      headlineSmall: GoogleFonts.sora(
+      bodySmall: GoogleFonts.sora(
         textStyle: base.headlineSmall?.copyWith(
           fontWeight: FontWeight.normal,
-          fontSize: 10,
+          fontSize: 12,
           color: const Color(0xFF252849),
         ),
       ),
+        bodyMedium :GoogleFonts.sora(
+          textStyle: base.headlineSmall?.copyWith(
+            fontWeight: FontWeight.normal,
+            fontSize: 16,
+            color: const Color(0xFF252849),
+          ),
+        ),
     );
   }
 }

@@ -4,7 +4,7 @@ enum SortingType {
   nameFromZ(type: FilterType.byName, name: 'По имени от Я до А'),
   ascendingOrder(type: FilterType.byPrice, name: 'По возрастанию'),
   descendingOrder(type: FilterType.byPrice, name: 'По убыванию'),
-  typeFromA(type: FilterType.byCategory, name: 'По типу от А до я'),
+  typeFromA(type: FilterType.byCategory, name: 'По типу от А до Я'),
   typeFromZ(type: FilterType.byCategory, name: 'По типу от Я до А');
 
   final FilterType type;
@@ -17,7 +17,7 @@ enum FilterType {
   none('Без сортировки'),
   byName('По имени'),
   byPrice('По цене'),
-  byCategory('по Категории');
+  byCategory('По типу');
 
   final String name;
 
