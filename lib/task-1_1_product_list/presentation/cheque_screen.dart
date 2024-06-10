@@ -45,7 +45,11 @@ class _ChequeScreenState extends State<ChequeScreen> {
     return FutureBuilder<ChequeEntity>(
       future: _data,
       builder: (_, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      }else if  (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasError) {
             return const _ErrorWidget();
           } else if (snapshot.hasData) {
