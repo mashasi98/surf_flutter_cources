@@ -6,7 +6,7 @@ class EmptyScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Center(
-      child: Text('Пустой экран'),
+      child: Text('Здесь пока ничего нет'),
     );
   }
 }
