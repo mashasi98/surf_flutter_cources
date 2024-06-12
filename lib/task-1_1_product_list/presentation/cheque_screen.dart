@@ -45,11 +45,11 @@ class _ChequeScreenState extends State<ChequeScreen> {
     return FutureBuilder<ChequeEntity>(
       future: _data,
       builder: (_, snapshot) {
-      if (snapshot.connectionState == ConnectionState.waiting) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      }else if  (snapshot.connectionState == ConnectionState.done) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasError) {
             return const _ErrorWidget();
           } else if (snapshot.hasData) {
@@ -200,43 +200,20 @@ class _ProductsViewWidget extends StatelessWidget {
     if (chequeData.products.isNotEmpty) {
       final bool isSortByCategory = currentFilter == SortingType.typeFromZ ||
           currentFilter == SortingType.typeFromA;
-      final List<dynamic> sortedList = _getSortedList(isSortByCategory);
-      final sortedLength = sortedList.length;
       return SizedBox(
         width: screenWidth,
         child: Column(
           children: [
             Expanded(
-              child: ListView.builder(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-                itemCount: sortedLength,
-                itemBuilder: (_, i) {
-                  final bool isLastCategory = i == sortedLength - 1;
-                  final categoryProducts = chequeData.products
-                      .where((product) => sortedList[i] == product.category)
-                      .toList();
-                  if (sortedList.isEmpty) return const SizedBox();
-                  if (isSortByCategory) {
-                    if (categoryProducts.isEmpty) return const SizedBox();
-                    final category = sortedList[i];
-                    return _CategoryWidget(
-                      category: category.name,
-                      productsOfCategory: categoryProducts,
+              child: isSortByCategory
+                  ? _CategoryViewWidget(
+                      chequeData: chequeData,
                       filter: currentFilter,
-                      products: chequeData.products,
-                      isLastElement: isLastCategory,
-                    );
-                  } else {
-                    final product = sortedList[i];
-                    return _ProductWidget(
-                      product: product,
-                      isLastElement: isLastCategory,
-                      products: sortedList as List<ProductEntity>,
-                    );
-                  }
-                },
-              ),
+                    )
+                  : _ItemViewWidget(
+                      chequeData: chequeData,
+                      filter: currentFilter,
+                    ),
             ),
           ],
         ),
@@ -245,84 +222,103 @@ class _ProductsViewWidget extends StatelessWidget {
       return const SizedBox();
     }
   }
-
-  List<dynamic> _getSortedList(bool isSortByCategory) {
-    return isSortByCategory
-        ? Category.values.sortByCategory(currentFilter)
-        : chequeData.products.sortByFilter(currentFilter);
-  }
 }
 
-class _ProductWidget extends StatelessWidget {
-  final ProductEntity product;
-  final bool isLastElement;
-  final List<ProductEntity> products;
+class _ItemViewWidget extends StatelessWidget {
+  final ChequeEntity chequeData;
+  final SortingType filter;
 
-  const _ProductWidget({
-    required this.product,
-    required this.isLastElement,
-    required this.products,
+  const _ItemViewWidget({
+    required this.filter,
+    required this.chequeData,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 15),
-      child: Column(
-        children: [
-          _ItemInfoWidget(
-            item: product,
-            isLastItem: isLastElement,
-            products: products,
+    final chequeProducts = chequeData.products;
+    final sortedProducts = chequeProducts.sortByFilter(filter);
+    final productsLength = sortedProducts.length;
+    bool isLastElement = false;
+    return ListView.builder(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+      itemCount: productsLength,
+      itemBuilder: (_, i) {
+        isLastElement = i == productsLength - 1;
+        return Container(
+          margin: const EdgeInsets.symmetric(horizontal: 15),
+          child: Column(
+            children: [
+              _ItemInfoWidget(
+                item: sortedProducts[i],
+                isLastItem: isLastElement,
+                products: chequeProducts,
+              ),
+              if (isLastElement) _FinanceWidget(products: chequeProducts),
+            ],
           ),
-          if (isLastElement) _FinanceWidget(products: products),
-        ],
-      ),
+        );
+      },
     );
   }
 }
 
-class _CategoryWidget extends StatelessWidget {
-  final String category;
-  final List<ProductEntity> productsOfCategory;
-  final List<ProductEntity> products;
+class _CategoryViewWidget extends StatelessWidget {
+  final ChequeEntity chequeData;
   final SortingType filter;
-  final bool isLastElement;
 
-  const _CategoryWidget(
-      {required this.category,
-    required this.productsOfCategory,
+  const _CategoryViewWidget({
+    required this.chequeData,
     required this.filter,
-    required this.products,
-    required this.isLastElement,
   });
 
   @override
   Widget build(BuildContext context) {
     var theme = CustomAppTheme.customTextTheme(Theme.of(context).textTheme);
     var screenWidth = MediaQuery.of(context).size.width;
-    return Container(
-      width: screenWidth,
-      margin: const EdgeInsets.symmetric(horizontal: 15),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(category, style: theme.bodyLarge),
-          const SizedBox(
-            height: 15,
+    final Set<Category> categoriesSet =
+        chequeData.products.map((product) => product.category).toSet();
+    final List<Category> sortedCategories =
+        List.of(categoriesSet).sortByCategory(filter);
+    var categoriesLength = sortedCategories.length;
+    final chequeProducts = chequeData.products;
+    return ListView.builder(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+      itemCount: categoriesLength,
+      itemBuilder: (_, i) {
+        final bool isLastCategory = i == categoriesLength - 1;
+        final categoryProducts = chequeData.products
+            .where((product) => sortedCategories[i] == product.category)
+            .toList();
+        if (sortedCategories.isEmpty || categoryProducts.isEmpty) {
+          return const SizedBox();
+        }
+        final category = sortedCategories[i];
+        final productsOfCategory = chequeData.products
+            .where((product) => product.category == category)
+            .toList();
+        return Container(
+          width: screenWidth,
+          margin: const EdgeInsets.symmetric(horizontal: 15),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(category.name, style: theme.bodyLarge),
+              const SizedBox(
+                height: 15,
+              ),
+              ...productsOfCategory.map(
+                (productOfCategory) => _ItemInfoWidget(
+                  item: productOfCategory,
+                  isLastItem: productOfCategory == productsOfCategory.last,
+                  products: chequeProducts,
+                ),
+              ),
+              if (isLastCategory) _FinanceWidget(products: chequeProducts),
+            ],
           ),
-          if (productsOfCategory.isNotEmpty)
-          ...productsOfCategory.map(
-            (productOfCategory) => _ItemInfoWidget(
-              item: productOfCategory,
-              isLastItem: productOfCategory == productsOfCategory.last,
-              products: products,
-            ),
-          ),
-          if (isLastElement) _FinanceWidget(products: products),
-        ],
-      ),
+        );
+      },
     );
   }
 }
@@ -410,7 +406,8 @@ class _ItemInfoWidget extends StatelessWidget {
                                         Expanded(
                                           flex: 2,
                                           child: Text(
-                                            item.decimalPrice.toFormattedCurrency(),
+                                            item.decimalPrice
+                                                .toFormattedCurrency(),
                                             style: theme.bodyMedium?.copyWith(
                                               color: const Color(0xFFB5B5B5),
                                               decoration:
@@ -431,7 +428,8 @@ class _ItemInfoWidget extends StatelessWidget {
                                           style: item.sale > 0
                                               ? theme.bodyMedium?.copyWith(
                                                   fontWeight: FontWeight.bold,
-                                                  color: const Color(0xFFFF0000),
+                                                  color:
+                                                      const Color(0xFFFF0000),
                                                 )
                                               : theme.bodyMedium?.copyWith(
                                                   fontWeight: FontWeight.bold),
@@ -453,7 +451,7 @@ class _ItemInfoWidget extends StatelessWidget {
             ),
             if (isLastItem)
               const Padding(
-                padding: EdgeInsets.only(top: 10 ),
+                padding: EdgeInsets.only(top: 10),
                 child: Divider(thickness: 0.5, height: 0.5),
               ),
           ],
@@ -532,7 +530,6 @@ class _FinanceWidgetState extends State<_FinanceWidget> {
                 ),
           );
   }
-
 }
 
 class _SumInfoWidget extends StatelessWidget {
@@ -553,7 +550,8 @@ class _SumInfoWidget extends StatelessWidget {
     return Row(
       children: [
         Expanded(
-          child: Text(description,
+          child: Text(
+            description,
             style: (isBoldTheme) ? textTheme.labelLarge : textTheme.labelMedium,
           ),
         ),

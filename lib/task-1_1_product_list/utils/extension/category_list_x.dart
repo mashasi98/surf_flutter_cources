@@ -16,6 +16,7 @@ extension CategoryListX on List<Category> {
   }
 
   List<Category> _sortByCategory(List<Category> list, {bool isFromA = true}) {
+    if (list.isEmpty) return [];
     List<Category> sortedCategories = List.from(list);
     sortedCategories.sort(
       (a, b) => isFromA
