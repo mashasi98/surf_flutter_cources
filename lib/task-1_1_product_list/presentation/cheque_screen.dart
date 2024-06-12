@@ -147,7 +147,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
       builder: (_, __, ___) => FilterScreen(filter: _currentFilter),
       isExpand: true,
     );
-    if (filter == null) return;
+    if (filter == null || filter == SortingType.none) return;
     if (filter != _currentFilter) {
       setState(
         () {
