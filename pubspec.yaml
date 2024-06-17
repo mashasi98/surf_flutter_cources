@@ -11,26 +11,35 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
-  cupertino_icons: ^1.0.6
   google_fonts: ^6.2.1
-  auto_size_text: ^3.0.0
   flutter_svg: ^2.0.10+1
+  spider: ^4.2.2
+  intl: ^0.19.0
+  bottom_sheet: ^4.0.4
+  decimal: ^3.0.2
+  collection: ^1.18.0
+  build_runner: ^2.4.11
+  json_serializable: ^6.8.0
+  flutter_lints: ^4.0.0
+  json_annotation: ^4.9.0
+  loading_indicator: ^3.1.1
 
 dev_dependencies:
+#  build_runner: ^2.3.3
+#  json_serializable: ^6.8.0
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^4.0.0
 
 flutter:
-
   uses-material-design: true
   assets:
     - assets/images/
     - assets/images/task-3/
-    - assets/images/task-3/arrow_down.gif
-    - assets/images/task-3/github.svg
-    - assets/images/task-2/
+    - assets/json/
+    - assets/images/task-2-1/
+
+
+
 
 

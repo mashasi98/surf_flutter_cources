@@ -7,7 +7,7 @@ void main() {
 }
 
 class MyGestureApp extends StatelessWidget {
-  const MyGestureApp({Key? key});
+  const MyGestureApp({super.key, Key? key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class MyGestureApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key});
+  const MyHomePage({super.key, Key? key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -40,7 +40,7 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class ChangeableWidget extends StatefulWidget {
-  const ChangeableWidget({Key? key});
+  const ChangeableWidget({super.key, Key? key});
 
   @override
   _ChangeableWidgetState createState() => _ChangeableWidgetState();

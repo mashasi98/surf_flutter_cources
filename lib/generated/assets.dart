@@ -2,8 +2,10 @@
 class Assets {
   Assets._();
 
-  static const String imagesTask3ArrowDown = 'assets/images/task-3/arrow_down.gif';
-  static const String imagesTask3Github = 'assets/images/task-3/github.svg';
+  static const String jsonColorsData = 'assets/json/colors_data.json';
+  static const String task21ArrowBack = 'assets/images/task-2-1/arrow_back.svg';
+  static const String task21CopyColor = 'assets/images/task-2-1/copyColor.svg';
+  static const String task21Loading = 'assets/images/task-2-1/Loading.gif';
   static const String task2Circle = 'assets/images/task-2/circle.png';
   static const String task2Cq = 'assets/images/task-2/cq.png';
   static const String task3ArrowDown = 'assets/images/task-3/arrow_down.gif';
