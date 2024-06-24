@@ -1,7 +1,6 @@
 import 'package:surf_flutter_cources/task-2_1-colors/api/service/color_api.dart';
 
-
-import '../../../task-2_1-colors/domain/entity/color_entity.dart';
+import '../../../domain/entity/color_entity.dart';
 import '../mapper/color_mapper.dart';
 
 final class ColorRepository {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../constant/app_colors.dart';
-import '../../constant/app_string.dart';
+import '../constant/app_colors.dart';
+import '../constant/app_string.dart';
 
 class SnackInfo {
   static void showSnack(BuildContext context) {
