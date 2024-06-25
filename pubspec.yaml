@@ -28,9 +28,10 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
-    - assets/images/task-3/
-    - assets/images/task-3/arrow_down.gif
-    - assets/images/task-3/github.svg
-    - assets/images/task-2/
+      #    - assets/images/task-3/
+      #    - assets/images/task-3/arrow_down.gif
+      #    - assets/images/task-3/github.svg
+      #    - assets/images/task-2/
+    - lib/task_3_1_theme/assets/
 
 
