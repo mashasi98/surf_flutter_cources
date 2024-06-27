@@ -7,8 +7,4 @@ final class AppString {
   static const red = 'Red';
   static const green = 'Green';
   static const blue = 'Blue';
-
-  static const copyIcon = 'assets/images/task-2-1/copyColor.svg';
-  static const arrowBackIcon = 'assets/images/task-2-1/arrow_back.svg';
-  static const loaderImage = 'assets/images/task-2-1/Loading.gif';
 }

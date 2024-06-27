@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:surf_flutter_cources/task-2_1-colors/api/service/color_api_assets.dart';
+import 'package:surf_flutter_cources/task-2_1-colors/api/service/color_api.dart';
+import 'package:surf_flutter_cources/task-2_1-colors/bloc/color_bloc/color_bloc.dart';
 import 'package:surf_flutter_cources/task-2_1-colors/bloc/detailed_color_bloc/detailed_color_bloc.dart';
+import 'package:surf_flutter_cources/task-2_1-colors/domain/data/mapper/color_mapper.dart';
+import 'package:surf_flutter_cources/task-2_1-colors/domain/data/repository/color_repository.dart';
 import 'package:surf_flutter_cources/task-2_1-colors/presentation/colors_screen.dart';
-
-import 'assets/data/mapper/color_mapper.dart';
-import 'assets/data/repository/color_repository.dart';
-import 'assets/theme/custom_app_theme.dart';
-import 'bloc/color_bloc/color_bloc.dart';
-
+import 'package:surf_flutter_cources/task-2_1-colors/uikit/theme/custom_app_theme.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
 final colorRepository = ColorRepository(
-  colorApi: ColorApiAssets(),
+  colorApi: ColorApi(),
   colorMapper: ColorMapper(),
 );
 
@@ -28,8 +26,7 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) =>
-          ColorBloc(repository: colorRepository)
-            ..add(LoadColorEvent()),
+          ColorBloc(repository: colorRepository),
         ),
         BlocProvider(
           create: (context) => DetailedColorBloc(),

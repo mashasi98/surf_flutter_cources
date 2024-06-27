@@ -4,7 +4,7 @@ sealed class ColorState extends Equatable {
   const ColorState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class ColorInitialState extends ColorState {}
@@ -13,11 +13,12 @@ class ColorLoadingState extends ColorState {}
 
 class ColorLoadedState extends ColorState {
   final List<ColorEntity> colors;
+  final String? copiedColorValue;
 
-  const ColorLoadedState({required this.colors});
+  const ColorLoadedState({required this.colors, this.copiedColorValue});
 
   @override
-  List<Object> get props => [colors];
+  List<Object?> get props => [colors, copiedColorValue];
 }
 
 class ColorErrorState extends ColorState {
@@ -26,18 +27,7 @@ class ColorErrorState extends ColorState {
   const ColorErrorState({required this.message});
 
   @override
-  List<Object> get props => [message];
+  List<Object?> get props => [message];
 }
 
 class ColorEmptyState extends ColorState {}
-
-class ColorCopiedState extends ColorState {
-  final List<ColorEntity> colors;
-  final String copiedColorValue;
-
-  const ColorCopiedState(
-      {required this.colors, required this.copiedColorValue});
-
-  @override
-  List<Object> get props => [colors, copiedColorValue];
-}

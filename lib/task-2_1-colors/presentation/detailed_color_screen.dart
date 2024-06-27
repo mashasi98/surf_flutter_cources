@@ -3,19 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:surf_flutter_cources/generated/assets.dart';
+import 'package:surf_flutter_cources/task-2_1-colors/bloc/color_bloc/color_bloc.dart';
+import 'package:surf_flutter_cources/task-2_1-colors/bloc/detailed_color_bloc/detailed_color_bloc.dart';
 import 'package:surf_flutter_cources/task-2_1-colors/domain/entity/color_entity.dart';
 import 'package:surf_flutter_cources/task-2_1-colors/domain/entity/rgb_type.dart';
+import 'package:surf_flutter_cources/task-2_1-colors/utils/constant/app_string.dart';
 import 'package:surf_flutter_cources/task-2_1-colors/utils/extensions/string_x.dart';
-
-import '../bloc/color_bloc/color_bloc.dart';
-import '../bloc/detailed_color_bloc/detailed_color_bloc.dart';
-import '../constant/app_string.dart';
-import '../utils/snak_info.dart';
+import 'package:surf_flutter_cources/task-2_1-colors/utils/snak_info.dart';
 
 class DetailedColorScreen extends StatefulWidget {
   final ColorEntity color;
+  final String? copiedColor;
 
-  const DetailedColorScreen({super.key, required this.color});
+  const DetailedColorScreen({super.key, required this.color, this.copiedColor});
 
   @override
   State<DetailedColorScreen> createState() => _DetailedColorScreenState();
@@ -29,16 +30,15 @@ class _DetailedColorScreenState extends State<DetailedColorScreen> {
     final preferredSizeHeight = colorBoxHeight - kToolbarHeight;
     final theme = Theme.of(context).textTheme;
 
-    return BlocConsumer<DetailedColorBloc, DetailedColorState>(
-      listener: (context, state) {
-      },
+    return BlocBuilder<DetailedColorBloc, DetailedColorState>(
       builder: (context, state) {
+        final isHexCopied = widget.copiedColor == widget.color.value;
         return Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(
             leading: IconButton(
               icon: SvgPicture.asset(
-                AppString.arrowBackIcon,
+                Assets.task21ArrowBack,
                 width: 24,
                 height: 24,
               ),
@@ -75,23 +75,17 @@ class _DetailedColorScreenState extends State<DetailedColorScreen> {
                         .add(ColorCopyEvent(widget.color.value));
                     BlocProvider.of<DetailedColorBloc>(context).add(
                       DetailedColorCopyEvent(
-                          colorValue: widget.color.value.hexToColorName()),
+                          colorValue: widget.color.value),
                     );
                     SnackInfo.showSnack(context);
                     Clipboard.setData(ClipboardData(text: widget.color.value));
                   },
-                  isCopied: state is DetailedColorCopyState ? true : false,
+                  isCopied: isHexCopied || (state is DetailedColorCopyState && state.colorValue == widget.color.value),
                 ),
                 const SizedBox(height: 20),
                 _RgbWidget(
                   color: widget.color.value.hexToColor(),
-                  longPressAction: () {
-                    BlocProvider.of<DetailedColorBloc>(context).add(
-                      DetailedColorCopyEvent(
-                        colorValue: widget.color.value,
-                      ),
-                    );
-                  },
+                  copiedColor: state is DetailedColorCopyState ? state.colorValue : null,
                 ),
               ],
             ),
@@ -104,9 +98,9 @@ class _DetailedColorScreenState extends State<DetailedColorScreen> {
 
 class _RgbWidget extends StatelessWidget {
   final Color color;
-  final VoidCallback longPressAction;
+  final String? copiedColor;
 
-  const _RgbWidget({required this.color, required this.longPressAction});
+  const _RgbWidget({required this.color, required this.copiedColor});
 
   @override
   Widget build(BuildContext context) {
@@ -114,21 +108,26 @@ class _RgbWidget extends StatelessWidget {
       children: RgbType.values
           .expandIndexed(
             (i, currentType) => [
-              Expanded(
-                child: _RoundShadowBoxWidget(
-                  label: currentType.name,
-                  value: switch (currentType) {
-                    RgbType.red => color.red.toString(),
-                    RgbType.blue => color.blue.toString(),
-                    RgbType.green => color.green.toString(),
-                  },
-                  longPressAction: longPressAction,
-                  isCopied: false,
-                ),
-              ),
-              if (i != RgbType.values.length - 1) const SizedBox(width: 20),
-            ],
-          )
+          Expanded(
+            child: _RoundShadowBoxWidget(
+              label: currentType.name,
+              value: switch (currentType) {
+                RgbType.red => color.red.toString(),
+                RgbType.blue => color.blue.toString(),
+                RgbType.green => color.green.toString(),
+              },
+              longPressAction: () {
+                final colorValue = color.value.toRadixString(16).padLeft(6, '0');
+                BlocProvider.of<DetailedColorBloc>(context).add(
+                  DetailedColorCopyEvent(colorValue: colorValue),
+                );
+              },
+              isCopied: copiedColor == color.value.toRadixString(16).padLeft(6, '0'),
+            ),
+          ),
+          if (i != RgbType.values.length - 1) const SizedBox(width: 20),
+        ],
+      )
           .toList(),
     );
   }
@@ -191,7 +190,7 @@ class _RoundShadowBoxWidget extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0),
                     child: SvgPicture.asset(
-                      AppString.copyIcon,
+                      Assets.task21CopyColor,
                       height: 12,
                       width: 12,
                     ),

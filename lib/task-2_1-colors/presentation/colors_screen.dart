@@ -3,14 +3,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:loading_indicator/loading_indicator.dart';
+import 'package:surf_flutter_cources/generated/assets.dart';
+import 'package:surf_flutter_cources/task-2_1-colors/bloc/color_bloc/color_bloc.dart';
 import 'package:surf_flutter_cources/task-2_1-colors/bloc/detailed_color_bloc/detailed_color_bloc.dart';
+import 'package:surf_flutter_cources/task-2_1-colors/domain/entity/color_entity.dart';
+import 'package:surf_flutter_cources/task-2_1-colors/presentation/detailed_color_screen.dart';
+import 'package:surf_flutter_cources/task-2_1-colors/utils/constant/app_string.dart';
 import 'package:surf_flutter_cources/task-2_1-colors/utils/extensions/string_x.dart';
-
-import '../bloc/color_bloc/color_bloc.dart';
-import '../constant/app_string.dart';
-import '../domain/entity/color_entity.dart';
-import '../utils/snak_info.dart';
-import 'detailed_color_screen.dart';
+import 'package:surf_flutter_cources/task-2_1-colors/utils/snak_info.dart';
 
 class ColorsScreen extends StatefulWidget {
   const ColorsScreen({super.key});
@@ -49,24 +49,21 @@ class _ColorsScreenState extends State<ColorsScreen> {
           ),
         ),
       ),
-      body: BlocConsumer<ColorBloc, ColorState>(
-        listener: (context, state) {},
+      body: BlocBuilder<ColorBloc, ColorState>(
         builder: (context, state) {
           if (state is ColorLoadingState) {
             return const _LoadingWidget();
-          } else if (state is ColorLoadedState) {
-            return _ContentWidget(
-              data: state.colors,
-              copiedColor: null,
-            );
-          } else if (state is ColorCopiedState) {
+          }
+          if (state is ColorLoadedState) {
             return _ContentWidget(
               data: state.colors,
               copiedColor: state.copiedColorValue,
             );
-          } else if (state is ColorErrorState) {
+          }
+          if (state is ColorErrorState) {
             return const _ErrorWidget();
-          } else if (state is ColorEmptyState) {
+          }
+          if (state is ColorEmptyState) {
             return const _EmptyWidget();
           }
           return const Center(child: Text('Unexpected state'));
@@ -74,7 +71,6 @@ class _ColorsScreenState extends State<ColorsScreen> {
       ),
     );
   }
-
 }
 
 class _ContentWidget extends StatelessWidget {
@@ -121,14 +117,7 @@ class _ColorWidget extends StatelessWidget {
     final theme = Theme.of(context).textTheme;
     return GestureDetector(
       onTap: () => _moveToDetailedScreen(context, colorData),
-      onLongPress: () => {
-        Clipboard.setData(ClipboardData(text: colorData.value)),
-        SnackInfo.showSnack(context),
-        context.read<ColorBloc>().add(ColorCopyEvent(colorData.value)),
-        context
-            .read<DetailedColorBloc>()
-            .add(DetailedColorCopyEvent(colorValue: colorData.value)),
-      },
+      onLongPress: () => _onColorCopy(context),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -155,7 +144,7 @@ class _ColorWidget extends StatelessWidget {
               ),
               if (isHexCopied)
                 SvgPicture.asset(
-                  AppString.copyIcon,
+                  Assets.task21CopyColor,
                   height: 12,
                   width: 12,
                 ),
@@ -166,12 +155,25 @@ class _ColorWidget extends StatelessWidget {
     );
   }
 
+  void _onColorCopy(BuildContext context) {
+    Clipboard.setData(ClipboardData(text: colorData.value));
+    SnackInfo.showSnack(context);
+    context.read<ColorBloc>().add(ColorCopyEvent(colorData.value));
+    context
+        .read<DetailedColorBloc>()
+        .add(DetailedColorCopyEvent(colorValue: colorData.value));
+  }
+
   void _moveToDetailedScreen(BuildContext context, ColorEntity selectedColor) {
+    final copiedColor = context.read<ColorBloc>().state is ColorLoadedState
+        ? (context.read<ColorBloc>().state as ColorLoadedState).copiedColorValue
+        : null;
+
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => BlocProvider(
           create: (context) => DetailedColorBloc(),
-          child: DetailedColorScreen(color: selectedColor),
+          child: DetailedColorScreen(color: selectedColor, copiedColor: copiedColor),
         ),
       ),
     );

@@ -15,5 +15,5 @@ class ColorCopyEvent extends ColorEvent {
   const ColorCopyEvent(this.colorValue);
 
   @override
-  List<Object> get props => [colorValue];
+  List<Object?> get props => [colorValue];
 }
