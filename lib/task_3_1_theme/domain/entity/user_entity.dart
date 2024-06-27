@@ -1,13 +1,13 @@
 class UserEntity {
   final int id;
-  final String name;
-  final String secondName;
-  final String email;
-  final String birthDay;
-  final String teamName;
-  final String position;
-  final List<String>? achievements;
-  final String? photo;
+  String name;
+  String secondName;
+  String email;
+  String birthDay;
+  String teamName;
+  String position;
+  List<String> achievements;
+  String? photo;
 
   UserEntity({
     required this.id,
@@ -20,4 +20,6 @@ class UserEntity {
     required this.achievements,
     required this.photo,
   });
+
+
 }

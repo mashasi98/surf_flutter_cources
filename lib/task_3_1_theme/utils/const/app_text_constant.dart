@@ -19,7 +19,7 @@ final class AppTextConstant {
 
   static const String birthDayText = 'Дата рождения';
 
-  static const String comandCountryText = 'Команда';
+  static const String teamCountryText = 'Команда';
 
   static const String playerPositionText = 'Позиция';
 
