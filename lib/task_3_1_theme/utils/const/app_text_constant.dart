@@ -37,9 +37,9 @@ final class AppTextConstant {
 
   static const String schemeText = 'Схема';
 
-  static const String darkThemeText = 'Светлая';
+  static const String lightThemeText = 'Светлая';
 
-  static const String lightThemeText = 'Темная';
+  static const String darkThemeText = 'Темная';
 
   static const String systemThemeText = 'Системная';
 

@@ -1,13 +1,11 @@
 import 'package:bottom_sheet/bottom_sheet.dart';
 import 'package:flutter/material.dart';
+import 'package:surf_flutter_cources/generated/assets.dart';
 import 'package:surf_flutter_cources/task_3_1_theme/domain/entity/theme_settings.dart';
 import 'package:surf_flutter_cources/task_3_1_theme/domain/state/theme_settings_state.dart';
-
-import '../../../generated/assets.dart';
-import '../../domain/entity/theme_mode.dart';
-import '../../utils/const/app_text_constant.dart';
-import '../widgets/theme_settings_provider.dart';
-import '../widgets/user_provider.dart';
+import 'package:surf_flutter_cources/task_3_1_theme/presentation/widgets/theme_settings_provider.dart';
+import 'package:surf_flutter_cources/task_3_1_theme/presentation/widgets/user_provider.dart';
+import 'package:surf_flutter_cources/task_3_1_theme/utils/const/app_text_constant.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -16,68 +14,56 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: const IconButton(
-          onPressed: null,
-          icon: Icon(
+        leading: IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: const Icon(
             Icons.arrow_back,
-            size: 24,
           ),
         ),
         title: const Align(
           alignment: Alignment.center,
-          child: Text(
-            AppTextConstant.profileText,
-          ),
+          child: Text(AppTextConstant.profileText),
         ),
-        actions: const <Widget>[
+        actions: <Widget>[
           TextButton(
-            onPressed: null,
-            child: Text(AppTextConstant.saveButtonText),
+            onPressed: () {
+              // Implement save functionality
+            },
+            child: const Text(AppTextConstant.saveButtonText),
           ),
         ],
       ),
-      body: _UserInfoWidget(),
+      body: const _UserInfoWidget(),
     );
   }
 }
 
 class _UserInfoWidget extends StatelessWidget {
+  const _UserInfoWidget();
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        alignment: Alignment.topCenter,
-        margin: const EdgeInsets.only(left: 20, right: 20, top: 5, bottom: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.start,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Expanded(
-              flex: 2,
-              child: _ProfilePhotoWidget(),
-            ),
-            Expanded(
-              flex: 2,
-              child: _AchievementsWidget(),
-            ),
-            Expanded(
-              flex: 9,
-              child: _ProfileInfoWidget(),
-            ),
-            const Expanded(flex: 2, child: SizedBox()),
-            _LogOutButtonWidget(onPressed: () {}),
-          ],
-        ),
+    return Container(
+      alignment: Alignment.topCenter,
+      margin: const EdgeInsets.only(left: 20, right: 20, top: 5, bottom: 20),
+      child: const Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Expanded(flex: 2, child: _ProfilePhotoWidget()),
+          Expanded(flex: 2, child: _AchievementsWidget()),
+          Expanded(flex: 9, child: _ProfileInfoWidget()),
+          Expanded(flex: 2, child: SizedBox()),
+          _LogOutButtonWidget(),
+        ],
       ),
     );
   }
 }
 
 class _LogOutButtonWidget extends StatelessWidget {
-  final VoidCallback onPressed;
-
-  const _LogOutButtonWidget({required this.onPressed});
+  const _LogOutButtonWidget();
 
   @override
   Widget build(BuildContext context) {
@@ -85,21 +71,21 @@ class _LogOutButtonWidget extends StatelessWidget {
       height: MediaQuery.of(context).size.height * 0.07,
       width: double.infinity,
       child: OutlinedButton(
-        onPressed: onPressed,
+        onPressed: null,
         style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20.0),
           ),
         ),
-        child: const Text(
-          AppTextConstant.logoutText,
-        ),
+        child: const Text(AppTextConstant.logoutText),
       ),
     );
   }
 }
 
 class _ProfilePhotoWidget extends StatelessWidget {
+  const _ProfilePhotoWidget();
+
   @override
   Widget build(BuildContext context) {
     final userState = UserProvider.of(context);
@@ -109,9 +95,9 @@ class _ProfilePhotoWidget extends StatelessWidget {
       child: CircleAvatar(
         radius: 40,
         backgroundImage: AssetImage(photoUrl),
-        child: const TextButton(
-          onPressed: null,
-          child: Text(AppTextConstant.profilePhotoEdit),
+        child: TextButton(
+          onPressed: () {},
+          child: const Text(AppTextConstant.profilePhotoEdit),
         ),
       ),
     );
@@ -119,6 +105,8 @@ class _ProfilePhotoWidget extends StatelessWidget {
 }
 
 class _AchievementsWidget extends StatelessWidget {
+  const _AchievementsWidget();
+
   @override
   Widget build(BuildContext context) {
     final userState = UserProvider.of(context);
@@ -159,10 +147,20 @@ class _AchievementsWidget extends StatelessWidget {
   }
 }
 
-class _ProfileInfoWidget extends StatelessWidget {
+class _ProfileInfoWidget extends StatefulWidget {
+  const _ProfileInfoWidget();
+
+  @override
+  State<_ProfileInfoWidget> createState() => _ProfileInfoWidgetState();
+}
+
+class _ProfileInfoWidgetState extends State<_ProfileInfoWidget> {
   @override
   Widget build(BuildContext context) {
     final userState = UserProvider.of(context);
+    final themeSettingsState = ThemeSettingsProvider.of(context);
+    final currentTheme = themeSettingsState?.currentThemeMode;
+
     return Column(
       mainAxisSize: MainAxisSize.max,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -171,7 +169,7 @@ class _ProfileInfoWidget extends StatelessWidget {
         _RoundedInfoWidget(
           label: AppTextConstant.nameText,
           value:
-              '${userState?.user.name ?? ''} ${userState?.user.secondName ?? ''}',
+          '${userState?.user.name ?? ''} ${userState?.user.secondName ?? ''}',
           haveOptions: false,
           onPressed: null,
         ),
@@ -191,54 +189,104 @@ class _ProfileInfoWidget extends StatelessWidget {
           label: AppTextConstant.teamCountryText,
           value: userState?.user.teamName ?? '',
           haveOptions: true,
-          onPressed: null,
+          onPressed: (context) {},
         ),
         _RoundedInfoWidget(
           label: AppTextConstant.playerPositionText,
           value: userState?.user.position ?? '',
           haveOptions: true,
-          onPressed: null,
+          onPressed: (context) {},
         ),
-        const _RoundedInfoWidget(
+        _RoundedInfoWidget(
           label: AppTextConstant.themeTitleText,
-          value: 'value',
+          value: ThemeSettings.getThemeName(currentTheme),
           haveOptions: true,
-          onPressed: _changeTheme,
+          onPressed: (context) {
+            _changeTheme(
+              context,
+              themeSettingsState,
+              currentTheme ?? ThemeMode.system,
+            );
+          },
         ),
       ],
     );
   }
 
-  void _changeTheme(BuildContext context) {
+  void _changeTheme(BuildContext context,
+      ThemeSettingsState? themeSettingsState, ThemeMode currentTheme) {
     showFlexibleBottomSheet(
       context: context,
-      maxHeight: 0,
+      minHeight: 0,
       initHeight: 0.5,
-      minHeight: 1,
-      builder: (context, controller, _) => _BottomSheetContent(controller),
+      maxHeight: 1,
+      builder: (context, controller, _) => _ThemeSettingsBottomSheet(
+        controller,
+        currentTheme,
+        themeSettingsState,
+      ),
       anchors: [0, 0.5, 1],
     );
   }
 }
 
-class _BottomSheetContent extends StatelessWidget {
-  final ScrollController controller;
+class _ThemeSettingsBottomSheet extends StatefulWidget {
+  final ScrollController scrollController;
+  final ThemeMode currentTheme;
+  final ThemeSettingsState? themeSettingsState;
 
-  const _BottomSheetContent(this.controller);
+  const _ThemeSettingsBottomSheet(
+      this.scrollController, this.currentTheme, this.themeSettingsState);
+
+  @override
+  State<_ThemeSettingsBottomSheet> createState() =>
+      _ThemeSettingsBottomSheetState();
+}
+
+class _ThemeSettingsBottomSheetState extends State<_ThemeSettingsBottomSheet> {
+  late ThemeMode _selectedMode;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedMode = widget.currentTheme;
+  }
 
   @override
   Widget build(BuildContext context) {
-    final themeSettingsState = ThemeSettingsProvider.of(context);
-
     return Material(
-      child: ListView(
-        controller: controller,
-        children: ThemeSettings.themeVariations.map(),
+      child: Column(
+        children: [
+          Expanded(
+            child: ListView(
+              controller: widget.scrollController,
+              children: ThemeSettings.themeVariations.entries.map((entry) {
+                return RadioListTile<ThemeMode>(
+                  title: Text(entry.key),
+                  value: entry.value,
+                  groupValue: _selectedMode,
+                  onChanged: (ThemeMode? themeMode) {
+                    setState(() {
+                      _selectedMode = themeMode!;
+                    });
+                  },
+                );
+              }).toList(),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              widget.themeSettingsState?.setThemeMode(_selectedMode);
+              Navigator.pop(context);
+            },
+            child: const Text(AppTextConstant.saveButtonText),
+          ),
+        ],
       ),
     );
   }
-
 }
+
 
 class _RoundedInfoWidget extends StatelessWidget {
   final String label;
@@ -277,7 +325,7 @@ class _RoundedInfoWidget extends StatelessWidget {
             ),
             if (haveOptions)
               IconButton(
-                onPressed: onPressed,
+                onPressed: () => onPressed?.call(context),
                 icon: const Icon(Icons.arrow_forward_ios, size: 20),
               )
           ],
