@@ -1,5 +1,6 @@
 import 'package:bottom_sheet/bottom_sheet.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:surf_flutter_cources/generated/assets.dart';
 import 'package:surf_flutter_cources/task_3_1_theme/domain/entity/theme_settings.dart';
 import 'package:surf_flutter_cources/task_3_1_theme/domain/state/theme_settings_state.dart';
@@ -15,21 +16,28 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            // Реализовать сохранение
+          },
           icon: const Icon(
             Icons.arrow_back,
           ),
         ),
         title: const Align(
           alignment: Alignment.center,
-          child: Text(AppTextConstant.profileText),
+          child: Text(
+            AppTextConstant.profileText,
+          ),
         ),
         actions: <Widget>[
           TextButton(
             onPressed: () {
-              // Implement save functionality
+              // Реализовать сохранение
             },
-            child: const Text(AppTextConstant.saveButtonText),
+            child: Text(
+              AppTextConstant.saveButtonText,
+              style: TextStyle(color: Theme.of(context).primaryColor),
+            ),
           ),
         ],
       ),
@@ -71,12 +79,9 @@ class _LogOutButtonWidget extends StatelessWidget {
       height: MediaQuery.of(context).size.height * 0.07,
       width: double.infinity,
       child: OutlinedButton(
-        onPressed: null,
-        style: ElevatedButton.styleFrom(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20.0),
-          ),
-        ),
+        onPressed: () {
+          // Реализовать выход из аккаунта
+        },
         child: const Text(AppTextConstant.logoutText),
       ),
     );
@@ -97,7 +102,11 @@ class _ProfilePhotoWidget extends StatelessWidget {
         backgroundImage: AssetImage(photoUrl),
         child: TextButton(
           onPressed: () {},
-          child: const Text(AppTextConstant.profilePhotoEdit),
+          child: Text(
+            AppTextConstant.profilePhotoEdit,
+            style:
+                TextStyle(color: Theme.of(context).textTheme.bodySmall?.color),
+          ),
         ),
       ),
     );
@@ -118,30 +127,34 @@ class _AchievementsWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Text(AppTextConstant.achievementsText),
+        Text(
+          AppTextConstant.achievementsText,
+          style: TextStyle(
+            color: Theme.of(context).secondaryHeaderColor,
+          ),
+        ),
         const SizedBox(height: 10),
         SizedBox(
           height: 32,
           width: screenWidth * 0.6,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
+          child: GridView.builder(
+            scrollDirection: Axis.vertical,
             itemCount: allAchievementsLength,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: allAchievementsLength,
+              mainAxisSpacing: 20.0,
+              crossAxisSpacing: 20.0,
+            ),
             itemBuilder: (context, index) {
-              return Row(
-                children: [
-                  Image.asset(
-                    allAchievements[index],
-                    width: 32,
-                    height: 32,
-                    fit: BoxFit.fill,
-                  ),
-                  if (allAchievementsLength != index + 1)
-                    const SizedBox(width: 20),
-                ],
+              return Image.asset(
+                allAchievements[index],
+                width: 32,
+                height: 32,
+                fit: BoxFit.fill,
               );
             },
           ),
-        )
+        ),
       ],
     );
   }
@@ -217,9 +230,12 @@ class _ProfileInfoWidgetState extends State<_ProfileInfoWidget> {
       ThemeSettingsState? themeSettingsState, ThemeMode currentTheme) {
     showFlexibleBottomSheet(
       context: context,
-      minHeight: 0,
-      initHeight: 0.5,
+      minHeight: 0.3,
+      initHeight: 0.4,
       maxHeight: 1,
+      bottomSheetBorderRadius: const BorderRadius.vertical(
+        top: Radius.circular(16),
+      ),
       builder: (context, controller, _) => _ThemeSettingsBottomSheet(
         controller,
         currentTheme,
@@ -235,8 +251,9 @@ class _ThemeSettingsBottomSheet extends StatefulWidget {
   final ThemeMode currentTheme;
   final ThemeSettingsState? themeSettingsState;
 
-  const _ThemeSettingsBottomSheet(
-      this.scrollController, this.currentTheme, this.themeSettingsState);
+  const _ThemeSettingsBottomSheet(this.scrollController,
+      this.currentTheme,
+      this.themeSettingsState,);
 
   @override
   State<_ThemeSettingsBottomSheet> createState() =>
@@ -245,48 +262,160 @@ class _ThemeSettingsBottomSheet extends StatefulWidget {
 
 class _ThemeSettingsBottomSheetState extends State<_ThemeSettingsBottomSheet> {
   late ThemeMode _selectedMode;
+  late int _selectedSchemeIndex;
 
   @override
   void initState() {
     super.initState();
     _selectedMode = widget.currentTheme;
+    _selectedSchemeIndex = widget.themeSettingsState?.currentThemeIndex ?? 0;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: Column(
-        children: [
-          Expanded(
-            child: ListView(
-              controller: widget.scrollController,
-              children: ThemeSettings.themeVariations.entries.map((entry) {
+    final int themeCount = AppTextConstant.themesIcons.length;
+
+    return Column(
+      children: [
+        Container(
+          margin: const EdgeInsets.all(20),
+          width: double.infinity,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(AppTextConstant.themeTitleText,
+                  style: Theme.of(context).textTheme.headlineLarge),
+              IconButton(
+                icon: const Icon(Icons.close),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          child: ListView(
+            controller: widget.scrollController,
+            children: [
+              ...ThemeSettings.themeVariations.entries.map((entry) {
                 return RadioListTile<ThemeMode>(
-                  title: Text(entry.key),
+                  title: Text(entry.key,
+                      style: Theme.of(context).textTheme.bodyLarge),
                   value: entry.value,
                   groupValue: _selectedMode,
                   onChanged: (ThemeMode? themeMode) {
                     setState(() {
                       _selectedMode = themeMode!;
+                      if (_selectedMode == ThemeMode.system) {
+                        _selectedSchemeIndex = 0;
+                      }
                     });
                   },
+                  activeColor: Theme.of(context).primaryColor,
                 );
-              }).toList(),
-            ),
+              }),
+              if (_selectedMode != ThemeMode.system)
+                Container(
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
+                  height: MediaQuery.of(context).size.height * 0.2,
+                  width: double.infinity,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        AppTextConstant.colorSchemeText,
+                        style: TextStyle(
+                          color: Theme.of(context).secondaryHeaderColor,
+                          fontSize: Theme.of(context)
+                              .textTheme
+                              .headlineSmall
+                              ?.fontSize,
+                        ),
+                      ),
+                      const SizedBox(height: 25),
+                      GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          crossAxisSpacing: 8.0,
+                          mainAxisSpacing: 8.0,
+                          childAspectRatio: 1,
+                        ),
+                        itemCount: themeCount,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _selectedSchemeIndex = index;
+                              });
+                            },
+                            child: Container(
+                              height: MediaQuery.of(context).size.height * 0.05,
+                              //вот тут какая -то неведомая мне магия,которая не дает установить высоту контейнера
+                              decoration: BoxDecoration(
+
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(
+                                  color: _selectedSchemeIndex == index
+                                      ? Theme.of(context).primaryColor
+                                      : Colors.transparent,
+                                  width: 1,
+                                ),
+                              ),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SvgPicture.asset(
+                                      AppTextConstant.themesIcons[index],
+                                      width: 18,
+                                      height: 18),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    '${AppTextConstant.schemeText} ${index + 1}',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelSmall
+                                        ?.copyWith(
+                                          color: Theme.of(context)
+                                              .secondaryHeaderColor,
+                                        ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+            ],
           ),
-          ElevatedButton(
+        ),
+        Container(
+          margin: const EdgeInsets.all(10),
+          width: double.infinity,
+          height: MediaQuery.of(context).size.height * 0.07,
+          child: ElevatedButton(
             onPressed: () {
               widget.themeSettingsState?.setThemeMode(_selectedMode);
+              widget.themeSettingsState?.setThemeIndex(_selectedSchemeIndex);
               Navigator.pop(context);
             },
-            child: const Text(AppTextConstant.saveButtonText),
+            child: const Text(AppTextConstant.doneText),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
-
 
 class _RoundedInfoWidget extends StatelessWidget {
   final String label;
@@ -303,32 +432,49 @@ class _RoundedInfoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: MediaQuery.of(context).size.height * 0.07,
       width: double.infinity,
-      decoration: BoxDecoration(
-        color: const Color(0x13050404),
-        borderRadius: BorderRadius.circular(15.0),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(label),
-                Text(value),
-              ],
-            ),
-            if (haveOptions)
-              IconButton(
-                onPressed: () => onPressed?.call(context),
-                icon: const Icon(Icons.arrow_forward_ios, size: 20),
-              )
-          ],
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16.0),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.only(left: 25, right: 2, top: 5, bottom: 5),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    label,
+                    style: TextStyle(
+                      color: Theme.of(context).secondaryHeaderColor,
+                    ),
+                  ),
+                  Text(
+                    value,
+                    style: TextStyle(
+                      fontWeight:
+                          Theme.of(context).textTheme.bodyLarge?.fontWeight,
+                      color: Theme.of(context).textTheme.bodyLarge?.color,
+                    ),
+                  ),
+                ],
+              ),
+              if (haveOptions)
+                IconButton(
+                  onPressed: () => onPressed?.call(context),
+                  icon: Icon(
+                    Icons.arrow_forward_ios,
+                    size: 20,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                )
+            ],
+          ),
         ),
       ),
     );

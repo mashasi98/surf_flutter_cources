@@ -6,7 +6,6 @@ import 'package:surf_flutter_cources/task_3_1_theme/domain/state/user_state.dart
 import 'package:surf_flutter_cources/task_3_1_theme/presentation/screen/profile_screen.dart';
 import 'package:surf_flutter_cources/task_3_1_theme/presentation/widgets/theme_settings_provider.dart';
 import 'package:surf_flutter_cources/task_3_1_theme/presentation/widgets/user_provider.dart';
-import 'package:surf_flutter_cources/task_3_1_theme/utils/theme/curlingo_light_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,39 +28,79 @@ void main() async {
       birthDay: '03.03.1986',
     ),
   );
-  final themeSettings = ThemeSettingsState();
 
   runApp(
     MyCurlingoApp(
       userState: userState,
-      themeSettingsState: themeSettings,
     ),
   );
 }
 
-class MyCurlingoApp extends StatelessWidget {
+class MyCurlingoApp extends StatefulWidget {
   final UserState userState;
-  final ThemeSettingsState themeSettingsState;
 
   const MyCurlingoApp({
     super.key,
     required this.userState,
-    required this.themeSettingsState,
   });
+
+  @override
+  MyCurlingoAppState createState() => MyCurlingoAppState();
+}
+
+class MyCurlingoAppState extends State<MyCurlingoApp> with TickerProviderStateMixin {
+  late ThemeSettingsState _themeSettingsState;
+  late AnimationController _controller;
+  late Animation<ThemeData> _themeAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _themeSettingsState = ThemeSettingsState(this);
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
+    _themeAnimation = ThemeDataTween(
+      begin: _themeSettingsState.currentThemeData,
+      end: _themeSettingsState.currentThemeData,
+    ).animate(_controller);
+
+    _themeSettingsState.addListener(_onThemeChanged);
+    _controller.value = 1.0;
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _themeSettingsState.removeListener(_onThemeChanged);
+    super.dispose();
+  }
+
+  void _onThemeChanged() {
+    setState(() {
+      _themeAnimation = ThemeDataTween(
+        begin: _themeAnimation.value,
+        end: _themeSettingsState.currentThemeData,
+      ).animate(_controller);
+
+      _controller.forward(from: 0);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return UserProvider(
-      userState: userState,
+      userState: widget.userState,
       child: ThemeSettingsProvider(
-        themeSettingsState: themeSettingsState,
+        themeSettingsState: _themeSettingsState,
         child: AnimatedBuilder(
-          animation: themeSettingsState,
+          animation: _themeAnimation,
           builder: (context, _) {
             return MaterialApp(
-              theme: greenAccentTheme(),
-              darkTheme: ThemeData.dark(),
-              themeMode: themeSettingsState.currentThemeMode,
+              theme: _themeAnimation.value,
+              darkTheme: _themeAnimation.value,
+              themeMode: _themeSettingsState.currentThemeMode,
               home: const ProfileScreen(),
             );
           },

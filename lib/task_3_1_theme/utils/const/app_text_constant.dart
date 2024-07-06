@@ -1,4 +1,7 @@
 final class AppTextConstant {
+
+  static const List<String> themesIcons = ['assets/images/task_3_1/theme_icon/frst.svg','assets/images/task_3_1/theme_icon/sec.svg','assets/images/task_3_1/theme_icon/thr.svg'];
+
   //AppBar Constants
   static const String profileText = 'Профиль';
 
