@@ -7,7 +7,6 @@ import 'package:surf_flutter_cources/task_3_1_theme/domain/state/theme_settings_
 import 'package:surf_flutter_cources/task_3_1_theme/presentation/widgets/theme_settings_provider.dart';
 import 'package:surf_flutter_cources/task_3_1_theme/presentation/widgets/user_provider.dart';
 import 'package:surf_flutter_cources/task_3_1_theme/utils/const/app_text_constant.dart';
-import 'package:surf_flutter_cources/task_3_1_theme/utils/extensions/theme_extensions.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -275,6 +274,7 @@ class _ThemeSettingsBottomSheetState extends State<_ThemeSettingsBottomSheet> {
   @override
   Widget build(BuildContext context) {
     final int themeCount = AppTextConstant.themesIcons.length;
+
     return Column(
       children: [
         Container(
@@ -353,10 +353,42 @@ class _ThemeSettingsBottomSheetState extends State<_ThemeSettingsBottomSheet> {
                                 _selectedSchemeIndex = index;
                               });
                             },
-                            child: _ThemeCard(
-                              selectedSchemeIndex: _selectedSchemeIndex,
-                              isSelected: _selectedSchemeIndex == index,
-                              currentIndex: index,
+                            child: Container(
+                              height: MediaQuery.of(context).size.height * 0.05,
+                              //вот тут какая -то неведомая мне магия,которая не дает установить высоту контейнера
+                              decoration: BoxDecoration(
+
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(
+                                  color: _selectedSchemeIndex == index
+                                      ? Theme.of(context).primaryColor
+                                      : Colors.transparent,
+                                  width: 1,
+                                ),
+                              ),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SvgPicture.asset(
+                                      AppTextConstant.themesIcons[index],
+                                      width: 18,
+                                      height: 18),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    '${AppTextConstant.schemeText} ${index + 1}',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelSmall
+                                        ?.copyWith(
+                                          color: Theme.of(context)
+                                              .secondaryHeaderColor,
+                                        ),
+                                  ),
+                                ],
+                              ),
                             ),
                           );
                         },
@@ -381,51 +413,6 @@ class _ThemeSettingsBottomSheetState extends State<_ThemeSettingsBottomSheet> {
           ),
         ),
       ],
-    );
-  }
-}
-
-class _ThemeCard extends StatelessWidget {
-  final int selectedSchemeIndex;
-  final bool isSelected;
-  final int currentIndex;
-
-  const _ThemeCard(
-      {required this.selectedSchemeIndex,
-      required this.isSelected,
-      required this.currentIndex});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.05,
-      //вот тут какая -то неведомая мне магия,которая не дает установить высоту контейнера
-      decoration: BoxDecoration(
-        color: Theme.of(context).getContainerColor(),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color:
-              isSelected ? Theme.of(context).primaryColor : Colors.transparent,
-          width: 1,
-        ),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SvgPicture.asset(AppTextConstant.themesIcons[currentIndex],
-              width: 18, height: 18),
-          const SizedBox(
-            height: 5,
-          ),
-          Text(
-            '${AppTextConstant.schemeText} ${currentIndex + 1}',
-            style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                  color: Theme.of(context).secondaryHeaderColor,
-                ),
-          ),
-        ],
-      ),
     );
   }
 }

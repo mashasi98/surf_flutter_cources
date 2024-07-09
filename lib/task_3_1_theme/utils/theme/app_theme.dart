@@ -54,7 +54,7 @@ final ThemeData lightThemeSchemeGreen = ThemeData(
     ),
   ),
   bottomSheetTheme: const BottomSheetThemeData(
-    backgroundColor: AppColors.themeCardLightGreenBackgroundColor,
+    backgroundColor: AppColors.bottomSheetLightGreenBackgroundColor,
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
@@ -309,7 +309,7 @@ final ThemeData darkThemeSchemeOrange = ThemeData(
     ),
   ),
   bottomSheetTheme: const BottomSheetThemeData(
-    backgroundColor: AppColors.backgroundOrangeDarkThemeColor,
+    backgroundColor: AppColors.cardOrangeDarkThemeColor,
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(

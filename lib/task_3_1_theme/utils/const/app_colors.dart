@@ -12,16 +12,13 @@ class AppColors extends Color {
   static const Color secondaryGreenThemeColor = Color(0xFF5114FF);
   static const Color secondaryGreenThemeTextColor = Color(0xFF77767B);
   //light
-  static const Color backgroundGreenLightThemeColor = Color(0xFFFDFDFD);
-  static const Color cardGreenLightThemeColor = Color(0xFFF8F8F8);
-  static const Color bottomSheetLightGreenBackgroundColor = Color(0xFFFDFDFD);
-  static const Color themeCardLightGreenBackgroundColor = Color(0xFFF4F4F4);
-
+  static const Color backgroundGreenLightThemeColor = Color(0xFFFFFFFF);
+  static const Color cardGreenLightThemeColor = Color(0xFFF6F6F6);
+  static const Color bottomSheetLightGreenBackgroundColor = Color(0xFFFFFFFF);
   //dark
   static const Color backgroundGreenDarkThemeColor = Color(0xFF000000);
   static const Color cardGreenDarkThemeColor = Color(0xFF222222);
   static const Color bottomSheetDarkGreenBackgroundColor = Color(0xFF222222);
-  static const Color themeCardDarkGreenBackgroundColor = Color(0xFF292929);
 
 //2-  Blue  theme colors
   static const Color primaryBlueColor = Color(0xFF5261EB);
@@ -29,14 +26,12 @@ class AppColors extends Color {
   static const Color secondaryBlueThemeTextColor = Color(0xFFA0AECF);
 
   static const Color backgroundBlueLightThemeColor = Color(0xFFF2F5FA);
-  static const Color cardBlueLightThemeColor = Color(0xFFFDFDFD);
-  static const Color bottomSheetLightBlueBackgroundColor = Color(0xFFFDFDFD);
-  static const Color themeCardLightBlueBackgroundColor = Color(0xFFF3F6FB);
+  static const Color cardBlueLightThemeColor = Color(0xFFFFFFFF);
+  static const Color bottomSheetLightBlueBackgroundColor = Color(0xFFF3F6FB);
   //dark
   static const Color backgroundBlueDarkThemeColor = Color(0xFF242439);
-  static const Color cardBlueDarkThemeColor = Color(0xFF383F56);
+  static const Color cardBlueDarkThemeColor = Color(0xFF384057);
   static const Color bottomSheetDarkBlueBackgroundColor = Color(0xFF383F56);
-  static const Color themeCardDarkBlueBackgroundColor = Color(0xFF434B64);
 
 //3- Orange light theme colors
   static const Color primaryOrangeColor = Color(0xFFFF7A00);
@@ -47,11 +42,7 @@ class AppColors extends Color {
 
   static const Color backgroundOrangeLightThemeColor = Color(0xFFFAF6F2);
   static const Color cardOrangeLightThemeColor = Color(0xFFFDFDFD);
-  static const Color bottomSheetOrangeLightBackgroundColor = Color(0xFFFDFDFD);
-  static const Color themeCardOrangeLightBackgroundColor = Color(0xFFF8F6F5);
   //dark
   static const Color backgroundOrangeDarkThemeColor = Color(0xFF262020);
   static const Color cardOrangeDarkThemeColor = Color(0xFF3B322F);
-  static const Color bottomSheetOrangeDarkBackgroundColor = Color(0xFF3B322F);
-  static const Color themeCardOrangeDarkBackgroundColor = Color(0xFF493F3B);
 }
