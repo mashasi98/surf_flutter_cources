@@ -31,12 +31,12 @@ class ThemeSettingsState extends ChangeNotifier {
       final Brightness brightness =
           PlatformDispatcher.instance.platformBrightness;
       return brightness == Brightness.dark
-          ? AppTheme.darkThemes[_currentThemeIndex]
-          : AppTheme.lightThemes[_currentThemeIndex];
+          ? AppThemeData.getDarkThemes[_currentThemeIndex]
+          : AppThemeData.getLightThemes[_currentThemeIndex];
     }
     return _currentThemeMode == ThemeMode.dark
-        ? AppTheme.darkThemes[_currentThemeIndex]
-        : AppTheme.lightThemes[_currentThemeIndex];
+        ? AppThemeData.getDarkThemes[_currentThemeIndex]
+        : AppThemeData.getLightThemes[_currentThemeIndex];
   }
 
   void _loadThemeSettings() async {

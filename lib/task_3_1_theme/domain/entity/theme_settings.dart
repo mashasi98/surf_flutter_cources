@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:surf_flutter_cources/task_3_1_theme/utils/const/app_text_constant.dart';
-
+import 'package:surf_flutter_cources/task_3_1_theme/utils/text/app_text_constant.dart';
 
 class ThemeSettings {
 

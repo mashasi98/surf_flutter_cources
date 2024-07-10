@@ -1,12 +1,13 @@
 import 'package:bottom_sheet/bottom_sheet.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:surf_flutter_cources/generated/assets.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:surf_flutter_cources/task_3_1_theme/domain/entity/theme_settings.dart';
 import 'package:surf_flutter_cources/task_3_1_theme/domain/state/theme_settings_state.dart';
 import 'package:surf_flutter_cources/task_3_1_theme/presentation/widgets/theme_settings_provider.dart';
 import 'package:surf_flutter_cources/task_3_1_theme/presentation/widgets/user_provider.dart';
-import 'package:surf_flutter_cources/task_3_1_theme/utils/const/app_text_constant.dart';
+import 'package:surf_flutter_cources/task_3_1_theme/utils/extension/app_color_scheme_x.dart';
+import 'package:surf_flutter_cources/task_3_1_theme/utils/text/app_text_constant.dart';
+import 'package:surf_flutter_cources/task_3_1_theme/utils/theme/app_theme.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -17,26 +18,26 @@ class ProfileScreen extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            // Реализовать сохранение
           },
           icon: const Icon(
             Icons.arrow_back,
           ),
         ),
-        title: const Align(
+        title: Align(
           alignment: Alignment.center,
           child: Text(
             AppTextConstant.profileText,
+            style: TextStyle(
+                color:
+                    Theme.of(context).extension<AppColorSchemeX>()?.onPrimary),
           ),
         ),
         actions: <Widget>[
           TextButton(
             onPressed: () {
-              // Реализовать сохранение
             },
-            child: Text(
+            child: const Text(
               AppTextConstant.saveButtonText,
-              style: TextStyle(color: Theme.of(context).primaryColor),
             ),
           ),
         ],
@@ -80,7 +81,6 @@ class _LogOutButtonWidget extends StatelessWidget {
       width: double.infinity,
       child: OutlinedButton(
         onPressed: () {
-          // Реализовать выход из аккаунта
         },
         child: const Text(AppTextConstant.logoutText),
       ),
@@ -94,7 +94,7 @@ class _ProfilePhotoWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userState = UserProvider.of(context);
-    final String photoUrl = userState?.user.photo ?? Assets.profileNoPh;
+    final String photoUrl = userState?.user.photo ?? '';
     return Align(
       alignment: Alignment.center,
       child: CircleAvatar(
@@ -104,8 +104,10 @@ class _ProfilePhotoWidget extends StatelessWidget {
           onPressed: () {},
           child: Text(
             AppTextConstant.profilePhotoEdit,
-            style:
-                TextStyle(color: Theme.of(context).textTheme.bodySmall?.color),
+            style: TextStyle(
+                color: Theme.of(context)
+                    .extension<AppColorSchemeX>()
+                    ?.onSecondary),
           ),
         ),
       ),
@@ -130,7 +132,7 @@ class _AchievementsWidget extends StatelessWidget {
         Text(
           AppTextConstant.achievementsText,
           style: TextStyle(
-            color: Theme.of(context).secondaryHeaderColor,
+            color: Theme.of(context).extension<AppColorSchemeX>()?.onBackground,
           ),
         ),
         const SizedBox(height: 10),
@@ -182,7 +184,7 @@ class _ProfileInfoWidgetState extends State<_ProfileInfoWidget> {
         _RoundedInfoWidget(
           label: AppTextConstant.nameText,
           value:
-          '${userState?.user.name ?? ''} ${userState?.user.secondName ?? ''}',
+              '${userState?.user.name ?? ''} ${userState?.user.secondName ?? ''}',
           haveOptions: false,
           onPressed: null,
         ),
@@ -273,8 +275,11 @@ class _ThemeSettingsBottomSheetState extends State<_ThemeSettingsBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final int themeCount = AppTextConstant.themesIcons.length;
-
+    int themeCount = _selectedMode == ThemeMode.dark
+        ? AppThemeData.getDarkThemes.length
+        : AppThemeData.getLightThemes.length;
+    final theme = Theme.of(context);
+    // .extension<AppColorSchemeX>();
     return Column(
       children: [
         Container(
@@ -284,7 +289,7 @@ class _ThemeSettingsBottomSheetState extends State<_ThemeSettingsBottomSheet> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(AppTextConstant.themeTitleText,
-                  style: Theme.of(context).textTheme.headlineLarge),
+                  style: theme.textTheme.titleLarge),
               IconButton(
                 icon: const Icon(Icons.close),
                 onPressed: () => Navigator.pop(context),
@@ -299,7 +304,7 @@ class _ThemeSettingsBottomSheetState extends State<_ThemeSettingsBottomSheet> {
               ...ThemeSettings.themeVariations.entries.map((entry) {
                 return RadioListTile<ThemeMode>(
                   title: Text(entry.key,
-                      style: Theme.of(context).textTheme.bodyLarge),
+                  ),
                   value: entry.value,
                   groupValue: _selectedMode,
                   onChanged: (ThemeMode? themeMode) {
@@ -310,7 +315,6 @@ class _ThemeSettingsBottomSheetState extends State<_ThemeSettingsBottomSheet> {
                       }
                     });
                   },
-                  activeColor: Theme.of(context).primaryColor,
                 );
               }),
               if (_selectedMode != ThemeMode.system)
@@ -327,12 +331,9 @@ class _ThemeSettingsBottomSheetState extends State<_ThemeSettingsBottomSheet> {
                       Text(
                         AppTextConstant.colorSchemeText,
                         style: TextStyle(
-                          color: Theme.of(context).secondaryHeaderColor,
-                          fontSize: Theme.of(context)
-                              .textTheme
-                              .headlineSmall
-                              ?.fontSize,
-                        ),
+                            color: theme
+                                .extension<AppColorSchemeX>()
+                                ?.onBackgroundSecondaryLabel),
                       ),
                       const SizedBox(height: 25),
                       GridView.builder(
@@ -355,13 +356,14 @@ class _ThemeSettingsBottomSheetState extends State<_ThemeSettingsBottomSheet> {
                             },
                             child: Container(
                               height: MediaQuery.of(context).size.height * 0.05,
-                              //вот тут какая -то неведомая мне магия,которая не дает установить высоту контейнера
                               decoration: BoxDecoration(
-
+                                color: theme
+                                    .extension<AppColorSchemeX>()
+                                    ?.surfaceSecondary,
                                 borderRadius: BorderRadius.circular(8),
                                 border: Border.all(
                                   color: _selectedSchemeIndex == index
-                                      ? Theme.of(context).primaryColor
+                                      ? theme.primaryColor
                                       : Colors.transparent,
                                   width: 1,
                                 ),
@@ -379,13 +381,14 @@ class _ThemeSettingsBottomSheetState extends State<_ThemeSettingsBottomSheet> {
                                   ),
                                   Text(
                                     '${AppTextConstant.schemeText} ${index + 1}',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .labelSmall
-                                        ?.copyWith(
-                                          color: Theme.of(context)
-                                              .secondaryHeaderColor,
-                                        ),
+                                    style: TextStyle(
+                                        color: _selectedSchemeIndex == index
+                                            ? theme
+                                                .extension<AppColorSchemeX>()
+                                                ?.onSurface
+                                            : theme
+                                                .extension<AppColorSchemeX>()
+                                                ?.onSurfaceDisabled),
                                   ),
                                 ],
                               ),
@@ -432,6 +435,8 @@ class _RoundedInfoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeExtension = Theme.of(context).extension<AppColorSchemeX>();
+
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.07,
       width: double.infinity,
@@ -450,16 +455,12 @@ class _RoundedInfoWidget extends StatelessWidget {
                 children: [
                   Text(
                     label,
-                    style: TextStyle(
-                      color: Theme.of(context).secondaryHeaderColor,
-                    ),
+                    style: TextStyle(color: themeExtension?.textFieldLabel),
                   ),
                   Text(
                     value,
                     style: TextStyle(
-                      fontWeight:
-                          Theme.of(context).textTheme.bodyLarge?.fontWeight,
-                      color: Theme.of(context).textTheme.bodyLarge?.color,
+                      color: themeExtension?.textField,
                     ),
                   ),
                 ],
@@ -467,10 +468,9 @@ class _RoundedInfoWidget extends StatelessWidget {
               if (haveOptions)
                 IconButton(
                   onPressed: () => onPressed?.call(context),
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.arrow_forward_ios,
                     size: 20,
-                    color: Theme.of(context).primaryColor,
                   ),
                 )
             ],
