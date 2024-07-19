@@ -2,8 +2,11 @@
 class Assets {
   Assets._();
 
-  static const String imagesTask3ArrowDown = 'assets/images/task-3/arrow_down.gif';
-  static const String imagesTask3Github = 'assets/images/task-3/github.svg';
+  static const String achievement1 = 'assets/images/task_3_1/achievement/1.png';
+  static const String achievement2 = 'assets/images/task_3_1/achievement/2.png';
+  static const String achievement3 = 'assets/images/task_3_1/achievement/3.png';
+  static const String profileNoPh = 'assets/images/task_3_1/profile/no_ph.png';
+  static const String profileProfilePh = 'assets/images/task_3_1/profile/profile_ph.png';
   static const String task2Circle = 'assets/images/task-2/circle.png';
   static const String task2Cq = 'assets/images/task-2/cq.png';
   static const String task3ArrowDown = 'assets/images/task-3/arrow_down.gif';
@@ -14,5 +17,8 @@ class Assets {
   static const String task3Github = 'assets/images/task-3/github.svg';
   static const String task3MainBg = 'assets/images/task-3/main_bg.jpg';
   static const String task3Tg = 'assets/images/task-3/tg.svg';
+  static const String themeIconFrst = 'assets/images/task_3_1/theme_icon/frst.svg';
+  static const String themeIconSec = 'assets/images/task_3_1/theme_icon/sec.svg';
+  static const String themeIconThr = 'assets/images/task_3_1/theme_icon/thr.svg';
 
 }
