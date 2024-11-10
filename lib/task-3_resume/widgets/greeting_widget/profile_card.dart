@@ -1,6 +1,8 @@
 import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:surf_flutter_cources/task-3_resume/resume_text.dart';
+
 import '../decorator/resume_box_decorator.dart';
 import '../decorator/resume_text_decorator.dart';
 
