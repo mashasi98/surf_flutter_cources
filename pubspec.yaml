@@ -16,6 +16,10 @@ dependencies:
   google_fonts: ^6.2.1
   auto_size_text: ^3.0.0
   flutter_svg: ^2.0.10+1
+  spider: ^4.2.2
+  decimal: ^3.0.2
+
+
 
 dev_dependencies:
   flutter_test:
@@ -32,5 +36,9 @@ flutter:
     - assets/images/task-3/arrow_down.gif
     - assets/images/task-3/github.svg
     - assets/images/task-2/
+    - assets/images/frag/
+    - assets/images/frag/brand/
+    - assets/images/frag/parfume_image/
+    - assets/images/frag/parfume_note/
 
 

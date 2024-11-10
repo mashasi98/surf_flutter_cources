@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:surf_flutter_cources/task-3_resume/resume_text.dart';
 import 'package:surf_flutter_cources/task-3_resume/widgets/decorator/resume_box_decorator.dart';
+
 import '../common_widget/neon_text_widget.dart';
 
 class ContactWidget extends StatelessWidget {
